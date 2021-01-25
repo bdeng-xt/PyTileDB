@@ -41,6 +41,7 @@ void init_tiledb_Query(pybind11::module& m) {
 //ignore_templatefunction 	tiledb::Query & set_buffer( const std::string & name, std::vector<T> & buf)
 		.def("set_int32_vector_buffer", &tiledb::Query::set_int32_vector_buffer, py::arg("attr"), py::arg("buf"))
 		.def("set_int64_vector_buffer", &tiledb::Query::set_int64_vector_buffer, py::arg("attr"), py::arg("buf"))
+		.def("set_uint32_vector_buffer", &tiledb::Query::set_uint32_vector_buffer, py::arg("attr"), py::arg("buf"))
 		.def("set_uint64_vector_buffer", &tiledb::Query::set_uint64_vector_buffer, py::arg("attr"), py::arg("buf"))
 		.def("set_double_vector_buffer", &tiledb::Query::set_double_vector_buffer, py::arg("attr"), py::arg("buf"))
 //ignore_keywords 	tiledb::Query & set_buffer( const std::string & name, void * buff, uint64_t nelements)

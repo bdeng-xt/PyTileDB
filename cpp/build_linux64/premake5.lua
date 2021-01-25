@@ -44,7 +44,7 @@ workspace "pytiledb" --solution "xtcommon"
 			"/usr/local/include",
             "/opt/anaconda3/include",
 			"/opt/anaconda3/include/python3.7m",
-			"/opt/anaconda3/lib/python3.7/site-packages/pyarrow"
+			"/opt/anaconda3/lib/python3.7/site-packages/pyarrow/include"
 
 		}
 		libdirs
@@ -55,7 +55,8 @@ workspace "pytiledb" --solution "xtcommon"
 			"/usr/local/lib",
             "/usr/local/lib64",
 --            "/usr/lib64/python2.7",
-            "/opt/anaconda3/lib",
+			"/opt/anaconda3/lib",
+			"/opt/anaconda3/lib/python3.7/site-packages/pyarrow"
 					
 		}
  
@@ -144,8 +145,8 @@ workspace "pytiledb" --solution "xtcommon"
 			targetname "pytiledb"
 			targetprefix ""
 			linkoptions {"-lpython3.7m"} --{"-lpython2.7"} --,"-lboost_python"}
-			linkoptions {"-larrow.so.200", "-larrow_python.so.200"}
-            linkoptions {"-l :libtiledb.so.2.0"}
+			linkoptions {"-l :libarrow.so.200", "-l :libarrow_python.so.200"}
+            linkoptions {"-l :libtiledb.so.2.1"}
  			defines {"HAVE_PYCONFIG"}
 
 		end--if _ACTION=="gmake" or _ACTION=="codeblocks" or _ACTION=="codelite" then

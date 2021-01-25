@@ -37,6 +37,8 @@
 
 #include "pybind_stats.h" 
 
+#include "pybind_tiledb_enum.h" 
+
 #include "pybind_type.h" 
 
 #include "pybind_utils.h" 
@@ -44,8 +46,6 @@
 #include "pybind_version.h" 
 
 #include "pybind_vfs.h" 
-
-#include "pybind_tiledb_enum.h" 
 ////////////
 #ifdef PYTHON_VERSION_2
 PYBIND11_MODULE(pytiledb2, m)
@@ -54,68 +54,59 @@ PYBIND11_MODULE(pytiledb, m)
 #endif
 {
 
-//file:../../../bdeng-xt/PyTileDB/cpp/src/tiledb/cpp_api/array.h
+//file:../../../bdeng-xt/PyTileDB/cpp/src/tiledb/cxx_api/array.h
 	init_tiledb_Array(m);
 
-//file:../../../bdeng-xt/PyTileDB/cpp/src/tiledb/cpp_api/array_schema.h
+//file:../../../bdeng-xt/PyTileDB/cpp/src/tiledb/cxx_api/array_schema.h
 	init_tiledb_ArraySchema(m);
 
-//file:../../../bdeng-xt/PyTileDB/cpp/src/tiledb/cpp_api/array_util.h
+//file:../../../bdeng-xt/PyTileDB/cpp/src/tiledb/cxx_api/array_util.h
 	init_tiledb_ArrayUtil(m);
 
-//file:../../../bdeng-xt/PyTileDB/cpp/src/tiledb/cpp_api/attribute.h
+//file:../../../bdeng-xt/PyTileDB/cpp/src/tiledb/cxx_api/attribute.h
 	init_tiledb_Attribute(m);
 
-//file:../../../bdeng-xt/PyTileDB/cpp/src/tiledb/cpp_api/config.h
+//file:../../../bdeng-xt/PyTileDB/cpp/src/tiledb/cxx_api/config.h
 	init_tiledb_Config(m);
 
-//file:../../../bdeng-xt/PyTileDB/cpp/src/tiledb/cpp_api/context.h
+//file:../../../bdeng-xt/PyTileDB/cpp/src/tiledb/cxx_api/context.h
 	init_tiledb_Context(m);
 
-//file:../../../bdeng-xt/PyTileDB/cpp/src/tiledb/cpp_api/core_interface.h
+//file:../../../bdeng-xt/PyTileDB/cpp/src/tiledb/cxx_api/core_interface.h
 
-//file:../../../bdeng-xt/PyTileDB/cpp/src/tiledb/cpp_api/dimension.h
+//file:../../../bdeng-xt/PyTileDB/cpp/src/tiledb/cxx_api/dimension.h
 	init_tiledb_Dimension(m);
 
-//file:../../../bdeng-xt/PyTileDB/cpp/src/tiledb/cpp_api/domain.h
+//file:../../../bdeng-xt/PyTileDB/cpp/src/tiledb/cxx_api/domain.h
 	init_tiledb_Domain(m);
 
-//file:../../../bdeng-xt/PyTileDB/cpp/src/tiledb/cpp_api/exception.h
+//file:../../../bdeng-xt/PyTileDB/cpp/src/tiledb/cxx_api/exception.h
 	init_tiledb_TileDBError(m);
 	init_tiledb_TypeError(m);
 	init_tiledb_SchemaMismatch(m);
 	init_tiledb_AttributeError(m);
 
-//file:../../../bdeng-xt/PyTileDB/cpp/src/tiledb/cpp_api/filter.h
+//file:../../../bdeng-xt/PyTileDB/cpp/src/tiledb/cxx_api/filter.h
 	init_tiledb_Filter(m);
 
-//file:../../../bdeng-xt/PyTileDB/cpp/src/tiledb/cpp_api/filter_list.h
+//file:../../../bdeng-xt/PyTileDB/cpp/src/tiledb/cxx_api/filter_list.h
 	init_tiledb_FilterList(m);
 
-//file:../../../bdeng-xt/PyTileDB/cpp/src/tiledb/cpp_api/group.h
+//file:../../../bdeng-xt/PyTileDB/cpp/src/tiledb/cxx_api/group.h
 
-//file:../../../bdeng-xt/PyTileDB/cpp/src/tiledb/cpp_api/object.h
+//file:../../../bdeng-xt/PyTileDB/cpp/src/tiledb/cxx_api/object.h
 	init_tiledb_Object(m);
 
-//file:../../../bdeng-xt/PyTileDB/cpp/src/tiledb/cpp_api/object_iter.h
+//file:../../../bdeng-xt/PyTileDB/cpp/src/tiledb/cxx_api/object_iter.h
 	init_tiledb_ObjectIter(m);
 
-//file:../../../bdeng-xt/PyTileDB/cpp/src/tiledb/cpp_api/query.h
+//file:../../../bdeng-xt/PyTileDB/cpp/src/tiledb/cxx_api/query.h
 	init_tiledb_Query(m);
 
-//file:../../../bdeng-xt/PyTileDB/cpp/src/tiledb/cpp_api/stats.h
+//file:../../../bdeng-xt/PyTileDB/cpp/src/tiledb/cxx_api/stats.h
 	init_tiledb_Stats(m);
 
-//file:../../../bdeng-xt/PyTileDB/cpp/src/tiledb/cpp_api/type.h
-
-//file:../../../bdeng-xt/PyTileDB/cpp/src/tiledb/cpp_api/utils.h
-
-//file:../../../bdeng-xt/PyTileDB/cpp/src/tiledb/cpp_api/version.h
-
-//file:../../../bdeng-xt/PyTileDB/cpp/src/tiledb/cpp_api/vfs.h
-	init_tiledb_VFS(m);
-
-//file:../../../bdeng-xt/PyTileDB/cpp/src/tiledb/c_api/tiledb_enum.h
+//file:../../../bdeng-xt/PyTileDB/cpp/src/tiledb/cxx_api/tiledb_enum.h
 	init__tiledb_query_type_t(m);
 	init__tiledb_object_t(m);
 	init__tiledb_filesystem_t(m);
@@ -129,5 +120,14 @@ PYBIND11_MODULE(pytiledb, m)
 	init__tiledb_serialization_type_t(m);
 	init__tiledb_walk_order_t(m);
 	init__tiledb_vfs_mode_t(m);
+
+//file:../../../bdeng-xt/PyTileDB/cpp/src/tiledb/cxx_api/type.h
+
+//file:../../../bdeng-xt/PyTileDB/cpp/src/tiledb/cxx_api/utils.h
+
+//file:../../../bdeng-xt/PyTileDB/cpp/src/tiledb/cxx_api/version.h
+
+//file:../../../bdeng-xt/PyTileDB/cpp/src/tiledb/cxx_api/vfs.h
+	init_tiledb_VFS(m);
 
 }//PYBIND11_MODULE(pytiledb, m)
