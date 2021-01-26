@@ -146,7 +146,7 @@ workspace "pytiledb" --solution "xtcommon"
 			targetprefix ""
 			linkoptions {"-lpython3.7m"} --{"-lpython2.7"} --,"-lboost_python"}
 			linkoptions {"-l :libarrow.so.200", "-l :libarrow_python.so.200"}
-            linkoptions {"-l :libtiledb.so.2.1"}
+            linkoptions {"-l :libtiledb.so.2.0"}
  			defines {"HAVE_PYCONFIG"}
 
 		end--if _ACTION=="gmake" or _ACTION=="codeblocks" or _ACTION=="codelite" then

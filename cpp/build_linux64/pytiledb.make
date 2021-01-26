@@ -24,7 +24,7 @@ ifeq ($(config),release_linux64)
   ALL_RESFLAGS += $(RESFLAGS) $(DEFINES) $(INCLUDES)
   LIBS +=
   LDDEPS +=
-  ALL_LDFLAGS += $(LDFLAGS) -L. -L/usr/lib64 -L/usr/local/lib -L/usr/local/lib64 -L/opt/anaconda3/lib -L/opt/anaconda3/lib/python3.7/site-packages/pyarrow -L/usr/lib64 -m64 -shared -Wl,-soname=pytiledb.so -s -m64 -std=gnu++0x -fPIC -D_GLIBCXX_USE_NANOSLEEP -D_THREAD_SAFE -D_XOPEN_SOURCE_EXTENEDED -D_GCC -D_PROTOTYPES -D_DRTP_V4 -DLINUX -D_POSIX_THREADS -lm -lrt -lpthread -lstdc++ -ldl -lpython3.7m -l :libarrow.so.200 -l :libarrow_python.so.200 -l :libtiledb.so.2.1
+  ALL_LDFLAGS += $(LDFLAGS) -L. -L/usr/lib64 -L/usr/local/lib -L/usr/local/lib64 -L/opt/anaconda3/lib -L/opt/anaconda3/lib/python3.7/site-packages/pyarrow -L/usr/lib64 -m64 -shared -Wl,-soname=pytiledb.so -s -m64 -std=gnu++0x -fPIC -D_GLIBCXX_USE_NANOSLEEP -D_THREAD_SAFE -D_XOPEN_SOURCE_EXTENEDED -D_GCC -D_PROTOTYPES -D_DRTP_V4 -DLINUX -D_POSIX_THREADS -lm -lrt -lpthread -lstdc++ -ldl -lpython3.7m -l :libarrow.so.200 -l :libarrow_python.so.200 -l :libtiledb.so.2.0
   LINKCMD = $(CXX) -o "$@" $(OBJECTS) $(RESOURCES) $(ALL_LDFLAGS) $(LIBS)
   define PREBUILDCMDS
   endef
