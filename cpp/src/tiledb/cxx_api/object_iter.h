@@ -71,7 +71,7 @@ class ObjectIter {
 
   /** Carries data to be passed to `obj_getter`. */
   struct ObjGetterData {
-    ObjGetterData(std::vector<tiledb::Object>& objs, bool array, bool group)
+    ObjGetterData(std::vector<Object>& objs, bool array, bool group)
         : objs_(objs)
         , array_(array)
         , group_(group) {

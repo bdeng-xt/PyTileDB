@@ -90,11 +90,11 @@ class Object {
     }
   }
 
-  Object() {}
+  Object() = default;
   Object(const tiledb::Object&) = default;
   Object(tiledb::Object&&) = default;
-  Object& operator=(const tiledb::Object&) = default;
-  Object& operator=(tiledb::Object&&) = default;
+  tiledb::Object& operator=(const tiledb::Object&) = default;
+  tiledb::Object& operator=(tiledb::Object&&) = default;
 
   /* ********************************* */
   /*                API                */

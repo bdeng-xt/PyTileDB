@@ -176,14 +176,14 @@ class Context {
    * @param fn Error handler callback function
    * @return Reference to this Context
    */
-  Context& set_error_handler(
+  tiledb::Context& set_error_handler(
       const std::function<void(const std::string&)>& fn) {
     error_handler_ = fn;
     return *this;
   }
 
   /** Returns a copy of the configuration of the context. **/
-  Config config() const {
+  tiledb::Config config() const {
     tiledb_config_t* c;
     handle_error(tiledb_ctx_get_config(ctx_.get(), &c));
     return Config(&c);

@@ -1573,34 +1573,6 @@ int32_t tiledb_attribute_dump(
   return TILEDB_OK;
 }
 
-int32_t tiledb_attribute_set_fill_value(
-    tiledb_ctx_t* ctx,
-    tiledb_attribute_t* attr,
-    const void* value,
-    uint64_t size) {
-  if (sanity_check(ctx) == TILEDB_ERR || sanity_check(ctx, attr) == TILEDB_ERR)
-    return TILEDB_ERR;
-
-  if (SAVE_ERROR_CATCH(ctx, attr->attr_->set_fill_value(value, size)))
-    return TILEDB_ERR;
-
-  return TILEDB_OK;
-}
-
-int32_t tiledb_attribute_get_fill_value(
-    tiledb_ctx_t* ctx,
-    tiledb_attribute_t* attr,
-    const void** value,
-    uint64_t* size) {
-  if (sanity_check(ctx) == TILEDB_ERR || sanity_check(ctx, attr) == TILEDB_ERR)
-    return TILEDB_ERR;
-
-  if (SAVE_ERROR_CATCH(ctx, attr->attr_->get_fill_value(value, size)))
-    return TILEDB_ERR;
-
-  return TILEDB_OK;
-}
-
 /* ********************************* */
 /*              DOMAIN               */
 /* ********************************* */
@@ -2785,20 +2757,6 @@ int32_t tiledb_query_get_layout(
   return TILEDB_OK;
 }
 
-int32_t tiledb_query_get_array(
-    tiledb_ctx_t* ctx, tiledb_query_t* query, tiledb_array_t** array) {
-  // Sanity check
-  if (sanity_check(ctx) == TILEDB_ERR || sanity_check(ctx, query) == TILEDB_ERR)
-    return TILEDB_ERR;
-
-  // Create array datatype
-  *array = new (std::nothrow) tiledb_array_t;
-
-  // Get array
-  (*array)->array_ = query->query_->array();
-
-  return TILEDB_OK;
-}
 int32_t tiledb_query_add_range(
     tiledb_ctx_t* ctx,
     tiledb_query_t* query,
@@ -3909,13 +3867,9 @@ int32_t tiledb_vfs_alloc(
   }
 
   // Initialize VFS object
-  auto compute_tp = ctx->ctx_->storage_manager()->compute_tp();
-  auto io_tp = ctx->ctx_->storage_manager()->io_tp();
   auto vfs_config = config ? config->config_ : nullptr;
   auto ctx_config = ctx->ctx_->storage_manager()->config();
-  if (SAVE_ERROR_CATCH(
-          ctx,
-          (*vfs)->vfs_->init(compute_tp, io_tp, &ctx_config, vfs_config))) {
+  if (SAVE_ERROR_CATCH(ctx, (*vfs)->vfs_->init(&ctx_config, vfs_config))) {
     delete (*vfs)->vfs_;
     delete vfs;
     return TILEDB_ERR;
@@ -4132,23 +4086,6 @@ int32_t tiledb_vfs_move_dir(
   if (SAVE_ERROR_CATCH(
           ctx,
           vfs->vfs_->move_dir(
-              tiledb::sm::URI(old_uri), tiledb::sm::URI(new_uri))))
-    return TILEDB_ERR;
-
-  return TILEDB_OK;
-}
-
-int32_t tiledb_vfs_copy_file(
-    tiledb_ctx_t* ctx,
-    tiledb_vfs_t* vfs,
-    const char* old_uri,
-    const char* new_uri) {
-  if (sanity_check(ctx) == TILEDB_ERR || sanity_check(ctx, vfs) == TILEDB_ERR)
-    return TILEDB_ERR;
-
-  if (SAVE_ERROR_CATCH(
-          ctx,
-          vfs->vfs_->copy_file(
               tiledb::sm::URI(old_uri), tiledb::sm::URI(new_uri))))
     return TILEDB_ERR;
 
@@ -4428,6 +4365,9 @@ int32_t tiledb_serialize_array_schema(
     tiledb_serialization_type_t serialize_type,
     int32_t client_side,
     tiledb_buffer_t** buffer) {
+  // Currently unused:
+  (void)client_side;
+
   // Sanity check
   if (sanity_check(ctx) == TILEDB_ERR ||
       sanity_check(ctx, array_schema) == TILEDB_ERR)
@@ -4443,8 +4383,7 @@ int32_t tiledb_serialize_array_schema(
           tiledb::sm::serialization::array_schema_serialize(
               array_schema->array_schema_,
               (tiledb::sm::SerializationType)serialize_type,
-              (*buffer)->buffer_,
-              client_side)))
+              (*buffer)->buffer_)))
     return TILEDB_ERR;
 
   return TILEDB_OK;
@@ -4533,8 +4472,7 @@ int32_t tiledb_deserialize_query(
               (tiledb::sm::SerializationType)serialize_type,
               client_side == 1,
               nullptr,
-              query->query_,
-              ctx->ctx_->storage_manager()->compute_tp())))
+              query->query_)))
     return TILEDB_ERR;
 
   return TILEDB_OK;

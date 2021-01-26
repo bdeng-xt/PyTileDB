@@ -71,7 +71,6 @@ class Deleter {
   }
 
   void operator()(tiledb_array_t* p) const {
-//	  std::cout << "start to delete tiledb_array_t" << std::endl;
     tiledb_array_free(&p);
   }
 

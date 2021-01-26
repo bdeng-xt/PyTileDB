@@ -39,13 +39,15 @@
 extern "C" {
 #endif
 
-/** Serialization type. */
-typedef enum {
-/** Helper macro for defining array type enums. */
-#define TILEDB_SERIALIZATION_TYPE_ENUM(id) TILEDB_##id
 #include "tiledb_enum.h"
-#undef TILEDB_SERIALIZATION_TYPE_ENUM
-} tiledb_serialization_type_t;
+
+// /** Serialization type. */
+// typedef enum {
+// /** Helper macro for defining array type enums. */
+// #define TILEDB_SERIALIZATION_TYPE_ENUM(id) TILEDB_##id
+// #include "tiledb_enum.h"
+// #undef TILEDB_SERIALIZATION_TYPE_ENUM
+// } tiledb_serialization_type_t;
 
 /**
  * Returns a string representation of the given serialization type.
@@ -80,7 +82,7 @@ TILEDB_EXPORT int32_t tiledb_serialization_type_from_str(
  * @param ctx The TileDB context.
  * @param array_schema The array schema to serialize.
  * @param serialization_type Type of serialization to use
- * @param client_side If set to 1, serialize from "client-side" perspective.
+ * @param client_side If set to 1, deserialize from "client-side" perspective.
  *    Else, "server-side."
  * @param buffer Will be set to a newly allocated buffer containing the
  *      serialized max buffer sizes.

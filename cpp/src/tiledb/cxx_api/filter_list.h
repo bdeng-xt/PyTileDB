@@ -36,7 +36,6 @@
 #include "context.h"
 #include "filter.h"
 #include "tiledb.h"
-#include "deleter.h"
 
 #include <iostream>
 #include <string>

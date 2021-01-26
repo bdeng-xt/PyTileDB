@@ -376,8 +376,8 @@ class VFS {
 
   VFS(const tiledb::VFS&) = default;
   VFS(tiledb::VFS&&) = default;
-  VFS& operator=(const tiledb::VFS&) = default;
-  VFS& operator=(tiledb::VFS&&) = default;
+  tiledb::VFS& operator=(const tiledb::VFS&) = default;
+  tiledb::VFS& operator=(tiledb::VFS&&) = default;
 
   /* ********************************* */
   /*                API                */
@@ -502,13 +502,6 @@ class VFS {
   void move_dir(const std::string& old_uri, const std::string& new_uri) const {
     auto& ctx = ctx_.get();
     ctx.handle_error(tiledb_vfs_move_dir(
-        ctx.ptr().get(), vfs_.get(), old_uri.c_str(), new_uri.c_str()));
-  }
-
-  /** Copies a TileDB file from an old URI to a new URI. */
-  void copy_file(const std::string& old_uri, const std::string& new_uri) const {
-    auto& ctx = ctx_.get();
-    ctx.handle_error(tiledb_vfs_copy_file(
         ctx.ptr().get(), vfs_.get(), old_uri.c_str(), new_uri.c_str()));
   }
 

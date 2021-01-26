@@ -74,8 +74,8 @@ class Schema {
   }
   Schema(const tiledb::Schema&) = default;
   Schema(tiledb::Schema&&) = default;
-  Schema& operator=(const tiledb::Schema&) = default;
-  Schema& operator=(tiledb::Schema&&) = default;
+  tiledb::Schema& operator=(const tiledb::Schema&) = default;
+  tiledb::Schema& operator=(tiledb::Schema&&) = default;
   virtual ~Schema() = default;
 
   /* ********************************* */

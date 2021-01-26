@@ -198,9 +198,9 @@ enum tiledb_query_status_t{ //#ifdef TILEDB_QUERY_STATUS_ENUM
 
 enum tiledb_serialization_type_t{ //#ifdef TILEDB_SERIALIZATION_TYPE_ENUM
     /** Serialize to json */
-    TILEDB_JSON = 0,//    TILEDB_SERIALIZATION_TYPE_ENUM(JSON), //    TILEDB_SERIALIZATION_TYPE_ENUM(JSON),
+    TILEDB_JSON = 0, //    TILEDB_SERIALIZATION_TYPE_ENUM(JSON),
     /** Serialize to capnp */
-    TILEDB_CAPNP = 1,//    TILEDB_SERIALIZATION_TYPE_ENUM(CAPNP), //    TILEDB_SERIALIZATION_TYPE_ENUM(CAPNP),
+    TILEDB_CAPNP = 1, //    TILEDB_SERIALIZATION_TYPE_ENUM(CAPNP),
 };//#endif
 
 enum tiledb_walk_order_t{ //#ifdef TILEDB_WALK_ORDER_ENUM

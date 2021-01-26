@@ -40,7 +40,7 @@
 #include "dimension.h"
 #include "tiledb.h"
 #include "type.h"
-
+#include <cstdint>
 #include <functional>
 #include <memory>
 #include <type_traits>
@@ -104,8 +104,8 @@ class Domain {
 
   Domain(const tiledb::Domain&) = default;
   Domain(tiledb::Domain&&) = default;
-  Domain& operator=(const tiledb::Domain&) = default;
-  Domain& operator=(tiledb::Domain&&) = default;
+  tiledb::Domain& operator=(const tiledb::Domain&) = default;
+  tiledb::Domain& operator=(tiledb::Domain&&) = default;
 
   /* ********************************* */
   /*                API                */
@@ -235,49 +235,6 @@ class Domain {
     return *this;
   }
 
-  void add_int32_dimension(const std::string& name, int bound_lower, int bound_upper, int extent)
-  {
-	  auto& ctx = ctx_.get();
-	  tiledb::Dimension d = Dimension::create_int32_dimension(ctx, name, bound_lower, bound_upper, extent);
-	  ctx.handle_error(tiledb_domain_add_dimension(
-		  ctx.ptr().get(), domain_.get(), d.ptr().get()));
-  }
-
-  void add_int64_dimension(const std::string& name, int64_t bound_lower, int64_t bound_upper, int64_t extent)
-  {
-	  auto& ctx = ctx_.get();
-	  tiledb::Dimension d = Dimension::create_int64_dimension(ctx, name, bound_lower, bound_upper, extent);
-	  ctx.handle_error(tiledb_domain_add_dimension(
-		  ctx.ptr().get(), domain_.get(), d.ptr().get()));
-  }
-
-  void add_uint64_dimension(const std::string& name, uint64_t bound_lower, uint64_t bound_upper, uint64_t extent)
-  {
-	  auto& ctx = ctx_.get();
-	  tiledb::Dimension d = Dimension::create_uint64_dimension(ctx, name, bound_lower, bound_upper, extent);
-	  ctx.handle_error(tiledb_domain_add_dimension(
-		  ctx.ptr().get(), domain_.get(), d.ptr().get()));
-  }
-
-  void add_double_dimension(const std::string& name, double bound_lower, double bound_upper, double extent)
-  {
-	  auto& ctx = ctx_.get();
-	  tiledb::Dimension d = Dimension::create_double_dimension(ctx, name, bound_lower, bound_upper, extent);
-	  ctx.handle_error(tiledb_domain_add_dimension(
-		  ctx.ptr().get(), domain_.get(), d.ptr().get()));
-  }
-
-  void add_string_dimension(const std::string& name)
-  {
-	  auto& ctx = ctx_.get();
-	  tiledb::Dimension d = Dimension::create_string_dimension(ctx, name);
-	  ctx.handle_error(tiledb_domain_add_dimension(
-		  ctx.ptr().get(), domain_.get(), d.ptr().get()));
-  }
-
-
-
-
   /**
    * Adds multiple dimensions to the domain.
    *
@@ -360,13 +317,7 @@ class Domain {
 
 /** Get a string representation of an attribute for an output stream. */
 inline std::ostream& operator<<(std::ostream& os, const tiledb::Domain& d) {
-	size_t n = (size_t)d.ndim();
-	tiledb_datatype_t data_type = tiledb_datatype_t::TILEDB_ANY;
-	if (n == 1)
-	{
-		data_type = d.type();
-	}
-  os << "Domain<(" << impl::to_str(data_type) << ")";
+  os << "Domain<(" << impl::to_str(d.type()) << ")";
   for (const auto& dimension : d.dimensions()) {
     os << " " << dimension;
   }

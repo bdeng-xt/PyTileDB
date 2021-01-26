@@ -37,6 +37,8 @@
 
 #include "array_schema.h"
 #include "context.h"
+#include "deleter.h"
+#include "config.h"
 #include "tiledb.h"
 #include "type.h"
 
@@ -90,6 +92,7 @@ class Array {
       : Array(ctx, array_uri, query_type, TILEDB_NO_ENCRYPTION, nullptr, 0) {
   }
 
+   
   /**
    * @brief Constructor. This opens an encrypted array for the given query type.
    * The destructor calls the `close()` method.
@@ -120,7 +123,7 @@ class Array {
       const void* encryption_key,
       uint32_t key_length)
       : ctx_(ctx)
-      , schema_(tiledb::ArraySchema(ctx, (tiledb_array_schema_t*)nullptr)) {
+      , schema_(ArraySchema(ctx, (tiledb_array_schema_t*)nullptr)) {
     tiledb_ctx_t* c_ctx = ctx.ptr().get();
     tiledb_array_t* array;
     ctx.handle_error(tiledb_array_alloc(c_ctx, array_uri.c_str(), &array));
@@ -130,7 +133,7 @@ class Array {
 
     tiledb_array_schema_t* array_schema;
     ctx.handle_error(tiledb_array_get_schema(c_ctx, array, &array_schema));
-    schema_ = tiledb::ArraySchema(ctx, array_schema);
+    schema_ = ArraySchema(ctx, array_schema);
   }
 
   // clang-format off
@@ -241,7 +244,7 @@ class Array {
       uint32_t key_length,
       uint64_t timestamp)
       : ctx_(ctx)
-      , schema_(tiledb::ArraySchema(ctx, (tiledb_array_schema_t*)nullptr)) {
+      , schema_(ArraySchema(ctx, (tiledb_array_schema_t*)nullptr)) {
     tiledb_ctx_t* c_ctx = ctx.ptr().get();
     tiledb_array_t* array;
     ctx.handle_error(tiledb_array_alloc(c_ctx, array_uri.c_str(), &array));
@@ -257,7 +260,7 @@ class Array {
 
     tiledb_array_schema_t* array_schema;
     ctx.handle_error(tiledb_array_get_schema(c_ctx, array, &array_schema));
-    schema_ = tiledb::ArraySchema(ctx, array_schema);
+    schema_ = ArraySchema(ctx, array_schema);
   }
 
   // clang-format off
@@ -292,7 +295,7 @@ class Array {
    */
   Array(const tiledb::Context& ctx, tiledb_array_t* carray, bool own = true)
       : ctx_(ctx)
-      , schema_(tiledb::ArraySchema(ctx, (tiledb_array_schema_t*)nullptr)) {
+      , schema_(ArraySchema(ctx, (tiledb_array_schema_t*)nullptr)) {
     if (carray == nullptr)
       throw TileDBError(
           "[TileDB::C++API] Error: Failed to create Array from null pointer");
@@ -312,8 +315,8 @@ class Array {
 
   Array(const tiledb::Array&) = default;
   Array(tiledb::Array&&) = default;
-  Array& operator=(const tiledb::Array&) = default;
-  Array& operator=(tiledb::Array&&) = default;
+  tiledb::Array& operator=(const tiledb::Array&) = default;
+  tiledb::Array& operator=(tiledb::Array&&) = default;
 
   /** Destructor; calls `close()`. */
   ~Array() {
@@ -343,7 +346,7 @@ class Array {
     tiledb_array_schema_t* schema;
     ctx.handle_error(
         tiledb_array_get_schema(ctx.ptr().get(), array_.get(), &schema));
-    return ArraySchema(ctx, schema);
+    return tiledb::ArraySchema(ctx, schema);
   }
 
   /** Returns a shared pointer to the C TileDB array object. */
@@ -417,7 +420,7 @@ class Array {
     tiledb_array_schema_t* array_schema;
     ctx.handle_error(
         tiledb_array_get_schema(c_ctx, array_.get(), &array_schema));
-    schema_ = ArraySchema(ctx, array_schema);
+    schema_ = tiledb::ArraySchema(ctx, array_schema);
   }
 
   // clang-format off
@@ -512,7 +515,7 @@ class Array {
     tiledb_array_schema_t* array_schema;
     ctx.handle_error(
         tiledb_array_get_schema(c_ctx, array_.get(), &array_schema));
-    schema_ = ArraySchema(ctx, array_schema);
+    schema_ = tiledb::ArraySchema(ctx, array_schema);
   }
 
   // clang-format off
@@ -562,7 +565,7 @@ class Array {
     tiledb_array_schema_t* array_schema;
     ctx.handle_error(
         tiledb_array_get_schema(c_ctx, array_.get(), &array_schema));
-    schema_ = ArraySchema(ctx, array_schema);
+    schema_ = tiledb::ArraySchema(ctx, array_schema);
   }
 
   /**
@@ -586,7 +589,7 @@ class Array {
     tiledb_array_schema_t* array_schema;
     ctx.handle_error(
         tiledb_array_get_schema(c_ctx, array_.get(), &array_schema));
-    schema_ = ArraySchema(ctx, array_schema);
+    schema_ = tiledb::ArraySchema(ctx, array_schema);
   }
 
   /** Returns the timestamp at which the array was opened. */
@@ -765,7 +768,7 @@ class Array {
     tiledb_array_schema_t* schema;
     ctx.handle_error(
         tiledb_array_schema_load(ctx.ptr().get(), uri.c_str(), &schema));
-    return ArraySchema(ctx, schema);
+    return tiledb::ArraySchema(ctx, schema);
   }
 
   /**
@@ -967,15 +970,7 @@ class Array {
 
   /**
    * Retrieves the non-empty domain from the array on the given dimension.
-   * This is the union of the non-empty domains of the array fragments.
-   *
-   *
-   * **Example:**
-   * @code{.cpp}
-   * tiledb::Context ctx;
-   * tiledb::Array array(ctx, "s3://bucket-name/array-name", TILEDB_READ);
-   * // Specify the dimension type (example uint32_t)
-   * auto non_empty = array.non_empty_domain<uint32_t>("d1");
+   * This is the union of the non-empty domai:uint32_t>("d1");
    * @endcode
    *
    * @tparam T Dimension datatype
@@ -1115,7 +1110,7 @@ class Array {
    * std::vector<int> data_a1(max_elements["a1"].second);
    *
    * // In sparse reads, coords are also fixed-sized attributes.
-   * std::vector<int> coords(max_elements["__coords"].second);
+   * std::vector<int> coords(max_elements[TILEDB_COORDS].second);
    *
    * // In variable attributes, e.g. std::string type, need two buffers,
    * // one for offsets and one for cell data.
@@ -1125,7 +1120,7 @@ class Array {
    *
    * @tparam T The domain datatype
    * @param subarray Targeted subarray.
-   * @return A map of attribute name (including `"__coords"`) to
+   * @return A map of attribute name (including `TILEDB_COORDS`) to
    *     the maximum number of elements that can be read in the given subarray.
    *     For each attribute, a pair of numbers are returned. The first,
    *     for variable-length attributes, is the maximum number of offsets
@@ -1172,8 +1167,9 @@ class Array {
     // Handle coordinates
     type_size = tiledb_datatype_size(schema_.domain().type());
     ctx.handle_error(tiledb_array_max_buffer_size(
-        c_ctx, array_.get(), "__coords", subarray.data(), &attr_size));
-    ret["__coords"] = std::pair<uint64_t, uint64_t>(0, attr_size / type_size);
+        c_ctx, array_.get(), TILEDB_COORDS, subarray.data(), &attr_size));
+    ret[TILEDB_COORDS] =
+        std::pair<uint64_t, uint64_t>(0, attr_size / type_size);
 
     return ret;
   }
@@ -1214,7 +1210,7 @@ class Array {
       config_aux = &local_cfg;
     }
 
-    (*config_aux)["sm.consolidation.mode"] = "array_meta";
+    (*config)["sm.consolidation.mode"] = "array_meta";
     consolidate(ctx, uri, TILEDB_NO_ENCRYPTION, nullptr, 0, config_aux);
   }
 
@@ -1258,7 +1254,7 @@ class Array {
       config_aux = &local_cfg;
     }
 
-    (*config_aux)["sm.consolidation.mode"] = "array_meta";
+    (*config)["sm.consolidation.mode"] = "array_meta";
     consolidate(
         ctx, uri, encryption_type, encryption_key, key_length, config_aux);
   }
@@ -1294,7 +1290,7 @@ class Array {
       config_aux = &local_cfg;
     }
 
-    (*config_aux)["sm.consolidation.mode"] = "array_meta";
+    (*config)["sm.consolidation.mode"] = "array_meta";
     consolidate(
         ctx,
         uri,

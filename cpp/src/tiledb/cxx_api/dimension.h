@@ -39,9 +39,9 @@
 #include "deleter.h"
 #include "exception.h"
 #include "object.h"
+#include "filter_list.h"
 #include "tiledb.h"
 #include "type.h"
-#include "filter_list.h"
 
 #include <functional>
 #include <memory>
@@ -75,8 +75,8 @@ class Dimension {
 
   Dimension(const tiledb::Dimension&) = default;
   Dimension(tiledb::Dimension&&) = default;
-  Dimension& operator=(const tiledb::Dimension&) = default;
-  Dimension& operator=(tiledb::Dimension&&) = default;
+  tiledb::Dimension& operator=(const tiledb::Dimension&) = default;
+  tiledb::Dimension& operator=(tiledb::Dimension&&) = default;
 
   /* ********************************* */
   /*                API                */
@@ -95,7 +95,7 @@ class Dimension {
   }
 
   /** Sets the number of values per coordinate. */
-  Dimension& set_cell_val_num(unsigned num) {
+  tiledb::Dimension& set_cell_val_num(unsigned num) {
     auto& ctx = ctx_.get();
     ctx.handle_error(
         tiledb_dimension_set_cell_val_num(ctx.ptr().get(), dim_.get(), num));
@@ -396,46 +396,6 @@ class Dimension {
     return create_impl(ctx, name, DataT::tiledb_type, &domain, &extent);
   }
 
-  static tiledb::Dimension create_int32_dimension(const tiledb::Context& ctx, const std::string& name, int bound_lower, int bound_upper, int extent)
-  {
-	  std::array<int, 2> bound;
-	  bound[0] = bound_lower;
-	  bound[1] = bound_upper;
-	  return Dimension::create<int>(ctx, name, bound, extent);
-  }
-
-  static tiledb::Dimension create_int64_dimension(const tiledb::Context& ctx, const std::string& name, int64_t bound_lower, int64_t bound_upper, int64_t extent)
-  {
-	  std::array<int64_t, 2> bound;
-	  bound[0] = bound_lower;
-	  bound[1] = bound_upper;
-	  return Dimension::create<int64_t>(ctx, name, bound, extent);
-  }
-
-  static tiledb::Dimension create_uint64_dimension(const tiledb::Context& ctx, const std::string& name, uint64_t bound_lower, uint64_t bound_upper, uint64_t extent)
-  {
-	  std::array<uint64_t, 2> bound;
-	  bound[0] = bound_lower;
-	  bound[1] = bound_upper;
-	  return Dimension::create<uint64_t>(ctx, name, bound, extent);
-  }
-
-  static tiledb::Dimension create_double_dimension(const tiledb::Context& ctx, const std::string& name, double bound_lower, double bound_upper, double extent)
-  {
-	  std::array<double, 2> bound;
-	  bound[0] = bound_lower;
-	  bound[1] = bound_upper;
-	  return Dimension::create<double>(ctx, name, bound, extent);
-  }
-
-  static tiledb::Dimension create_string_dimension(const tiledb::Context& ctx, const std::string& name)
-  {
-	   
-	  return Dimension::create(ctx, name, tiledb_datatype_t::TILEDB_STRING_ASCII, nullptr, nullptr);
-  }
-
-
-
   /**
    * Factory function for creating a new dimension (non typechecked).
    *
@@ -518,7 +478,7 @@ class Dimension {
 /* ********************************* */
 
 /** Get a string representation of a dimension for an output stream. */
-inline std::ostream& operator<<(std::ostream& os, const tiledb::Dimension& dim) {
+inline std::ostream& operator<<(std::ostream& os, const Dimension& dim) {
   os << "Dim<" << dim.name() << "," << dim.domain_to_str() << ","
      << dim.tile_extent_to_str() << ">";
   return os;

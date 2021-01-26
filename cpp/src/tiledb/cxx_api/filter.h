@@ -34,9 +34,7 @@
 #define TILEDB_CPP_API_FILTER_H
 
 #include "tiledb.h"
-#include "context.h"
 #include "deleter.h"
-
 #include <iostream>
 #include <string>
 
@@ -132,7 +130,7 @@ class Filter {
   template <
       typename T,
       typename std::enable_if<std::is_arithmetic<T>::value>::type* = nullptr>
-  Filter& set_option(tiledb_filter_option_t option, T value) {
+  tiledb::Filter& set_option(tiledb_filter_option_t option, T value) {
     auto& ctx = ctx_.get();
     option_value_typecheck<T>(option);
     ctx.handle_error(tiledb_filter_set_option(
@@ -163,7 +161,7 @@ class Filter {
    *
    * @note set_option<T>(option, T value) is preferred as it is safer.
    */
-  Filter& set_option(tiledb_filter_option_t option, const void* value) {
+  tiledb::Filter& set_option(tiledb_filter_option_t option, const void* value) {
     auto& ctx = ctx_.get();
     ctx.handle_error(tiledb_filter_set_option(
         ctx.ptr().get(), filter_.get(), option, value));
@@ -322,7 +320,7 @@ class Filter {
 };
 
 /** Gets a string representation of a filter for an output stream. */
-inline std::ostream& operator<<(std::ostream& os, const tiledb::Filter& f) {
+inline std::ostream& operator<<(std::ostream& os, const Filter& f) {
   os << "Filter<" << Filter::to_str(f.filter_type()) << '>';
   return os;
 }

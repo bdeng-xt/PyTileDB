@@ -263,11 +263,10 @@ class Config {
    *    parallel.<br>
    *    **Default**: 1
    * - `sm.num_tbb_threads` <br>
-   *    The number of threads allocated for the TBB thread pool. Note: this
-   *    is a whole-program setting. Usually this should not be modified from
-   *    the default. See also the documentation for TBB's `task_scheduler_init`
-   *    class. When TBB is disabled, this will be used to set the level of
-   *    concurrency for generic threading where TBB is otherwise used. <br>
+   *    The number of threads allocated for the TBB thread pool (if TBB is
+   *    enabled). Note: this is a whole-program setting. Usually this should not
+   *    be modified from the default. See also the documentation for TBB's
+   *    `task_scheduler_init` class.<br>
    *    **Default**: TBB automatic
    * - `sm.consolidation.amplification` <br>
    *    The factor by which the size of the dense fragment resulting
@@ -279,7 +278,7 @@ class Config {
    *    (since the resulting fragments is dense). <br>
    *    **Default**: 1.0
    * - `sm.consolidation.buffer_size` <br>
-   *    The size (in bytes) of the attribute buffers used during
+   *    The size (in bytes) of the attribute buffers used duringclass_str='%s\t\t.def(py::int<%s>())\n' % (class_str,orig_param_str)
    *    consolidation. <br>
    *    **Default**: 50,000,000
    * - `sm.consolidation.steps` <br>
@@ -319,10 +318,7 @@ class Config {
    * - `vfs.min_batch_gap` <br>
    *    The minimum number of bytes between two VFS read batches.<br>
    *    **Default**: 500KB
-   * - `vfs.file.posix_file_permissions` <br>
-   *    permissions to use for posix file system with file or dir creation.<br>
-   *    **Default**: 644
-   * - `vfs.file.posix_directory_permissions` <br>
+   * - `vfs.file.posix_permissions` <br>
    *    permissions to use for posix file system with file or dir creation.<br>
    *    **Default**: 755
    * - `vfs.file.max_parallel_ops` <br>
@@ -340,9 +336,8 @@ class Config {
    *    Set the Azure Storage Account key. <br>
    *    **Default**: ""
    * - `vfs.azure.blob_endpoint` <br>
-   *    Overrides the default Azure Storage Blob endpoint. If empty, the
-   * endpoint will be constructed from the storage account name. This should not
-   * include an http:// or https:// prefix. <br>
+   *    Set the Azure Storage Blob endpoint. This should not include an
+   *    http:// or https:// prefix. <br>
    *    **Default**: ""
    * - `vfs.azure.block_list_block_size` <br>
    *    The block size (in bytes) used in Azure blob block list writes.
@@ -444,7 +439,7 @@ class Config {
    *    **Default**: 0
    * - `vfs.s3.proxy_scheme` <br>
    *    The proxy scheme. <br>
-   *    **Default**: "http"
+   *    **Default**: "https"
    * - `vfs.s3.proxy_username` <br>
    *    The proxy username. Note: this parameter is not serialized by
    *    `tiledb_config_save_to_file`. <br>
@@ -514,7 +509,7 @@ class Config {
    * @param param Name of parameter
    * @return Reference to this Config instance
    */
-  Config& unset(const std::string& param) {
+  tiledb::Config& unset(const std::string& param) {
     tiledb_error_t* err;
     tiledb_config_unset(config_.get(), param.c_str(), &err);
     impl::check_config_error(err);

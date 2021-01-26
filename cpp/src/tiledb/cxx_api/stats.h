@@ -35,7 +35,6 @@
 
 #include "tiledb.h"
 #include "exception.h"
-
 namespace tiledb {
 
 /**
