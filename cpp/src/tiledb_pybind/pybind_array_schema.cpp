@@ -38,6 +38,7 @@ void init_tiledb_ArraySchema(pybind11::module& m) {
 		.def("attribute_num", &tiledb::ArraySchema::attribute_num)
 		.def("attribute", (tiledb::Attribute (tiledb::ArraySchema::*)(unsigned int) const)(&tiledb::ArraySchema::attribute), py::arg("i"))
 		.def("has_attribute", &tiledb::ArraySchema::has_attribute, py::arg("name"))
+		.def("to_info_str", &tiledb::ArraySchema::to_info_str)
 		.def_static("to_str", static_cast< std::string (*)(tiledb_array_type_t) >(&tiledb::ArraySchema::to_str))
 		.def_static("to_str", static_cast< std::string (*)(tiledb_layout_t) >(&tiledb::ArraySchema::to_str))
 		.def("attribute_names", &tiledb::ArraySchema::attribute_names)

@@ -39,13 +39,13 @@
 
 #include "pybind_object_iter.h" 
 
-#include "pybind_query.h" 
-
 #include "pybind_stats.h" 
 
 #include "pybind_tiledb_enum.h" 
 
 #include "pybind_vfs.h" 
+
+#include "pybind_query.h" 
 ////////////
 #ifdef PYTHON_VERSION_2
 PYBIND11_MODULE(pytiledb2, m)
@@ -106,9 +106,6 @@ PYBIND11_MODULE(pytiledb, m)
 //file:../../../bdeng-xt/PyTileDB/cpp/src/tiledb/cxx_api/object_iter.h
 	init_tiledb_ObjectIter(m);
 
-//file:../../../bdeng-xt/PyTileDB/cpp/src/tiledb/cxx_api/query.h
-	init_tiledb_Query(m);
-
 //file:../../../bdeng-xt/PyTileDB/cpp/src/tiledb/cxx_api/stats.h
 	init_tiledb_Stats(m);
 
@@ -129,5 +126,8 @@ PYBIND11_MODULE(pytiledb, m)
 
 //file:../../../bdeng-xt/PyTileDB/cpp/src/tiledb/cxx_api/vfs.h
 	init_tiledb_VFS(m);
+
+//file:../../../bdeng-xt/PyTileDB/cpp/src/tiledb/cxx_api/query.h
+	init_tiledb_Query(m);
 
 }//PYBIND11_MODULE(pytiledb, m)

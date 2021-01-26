@@ -574,6 +574,21 @@ class ArraySchema : public Schema {
     return has_attr == 1;
   }
 
+  std::string to_info_str()
+  {
+          std::stringstream ss;
+          ss << "ArraySchema<";
+          ss << tiledb::ArraySchema::to_str(array_type());
+          ss << ' ' << domain();
+          for (const auto& a : attributes()) {
+                  ss << ' ' << a.second;
+          }
+          ss << '>';
+
+          return ss.str();
+  }
+
+
   /* ********************************* */
   /*         STATIC FUNCTIONS          */
   /* ********************************* */
