@@ -1,0 +1,108 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" ToolsVersion="14.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup Label="ProjectConfigurations">
+    <ProjectConfiguration Include="Release win64|x64">
+      <Configuration>Release win64</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
+  </ItemGroup>
+  <PropertyGroup Label="Globals">
+    <ProjectGuid>{628D0651-4E5A-615C-7773-4F04639F96EA}</ProjectGuid>
+    <IgnoreWarnCompileDuplicatedFilename>true</IgnoreWarnCompileDuplicatedFilename>
+    <Keyword>Win32Proj</Keyword>
+    <RootNamespace>pytiledb</RootNamespace>
+    <WindowsTargetPlatformVersion>8.1</WindowsTargetPlatformVersion>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release win64|x64'" Label="Configuration">
+    <ConfigurationType>DynamicLibrary</ConfigurationType>
+    <UseDebugLibraries>false</UseDebugLibraries>
+    <CharacterSet>NotSet</CharacterSet>
+    <PlatformToolset>v140</PlatformToolset>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
+  <ImportGroup Label="ExtensionSettings">
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Release win64|x64'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <PropertyGroup Label="UserMacros" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release win64|x64'">
+    <LinkIncremental>true</LinkIncremental>
+    <OutDir>..\..\</OutDir>
+    <IntDir>obj\</IntDir>
+    <TargetName>pytiledb</TargetName>
+    <TargetExt>.pyd</TargetExt>
+  </PropertyGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release win64|x64'">
+    <ClCompile>
+      <PrecompiledHeader>NotUsing</PrecompiledHeader>
+      <WarningLevel>Level3</WarningLevel>
+      <PreprocessorDefinitions>WIN32;_WIN32;WIN32_LEAN_AND_MEAN;_WIN64;HAVE_PYCONFIG;_MT;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <AdditionalIncludeDirectories>..\src\tiledb\cxx_api;..\src\tiledb_pybind;.;include;..\include;C:\Dev\boost_1_68_0;C:\Dev\Python\Lib\site-packages\pyarrow\include;..\..\..\pybind11-2.6.1\include;C:\Dev\Python\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <Optimization>Disabled</Optimization>
+      <AdditionalOptions>/wd"4996" /wd"4819" /wd"4251" /wd"4005" /wd"4275" /wd"4800" /bigobj %(AdditionalOptions)</AdditionalOptions>
+    </ClCompile>
+    <Link>
+      <SubSystem>Windows</SubSystem>
+      <AdditionalDependencies>python3.lib;arrow.lib;arrow_python.lib;tiledb.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalLibraryDirectories>.;C:\Dev\Python\libs;..\..\lib\win64;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <ImportLibrary>..\..\pytiledb.lib</ImportLibrary>
+      <AdditionalOptions>/NXCOMPAT:NO %(AdditionalOptions)</AdditionalOptions>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemGroup>
+    <ClInclude Include="..\src\tiledb\cxx_api\array.h" />
+    <ClInclude Include="..\src\tiledb\cxx_api\array_schema.h" />
+    <ClInclude Include="..\src\tiledb\cxx_api\array_util.h" />
+    <ClInclude Include="..\src\tiledb\cxx_api\attribute.h" />
+    <ClInclude Include="..\src\tiledb\cxx_api\config.h" />
+    <ClInclude Include="..\src\tiledb\cxx_api\context.h" />
+    <ClInclude Include="..\src\tiledb\cxx_api\core_interface.h" />
+    <ClInclude Include="..\src\tiledb\cxx_api\deleter.h" />
+    <ClInclude Include="..\src\tiledb\cxx_api\dimension.h" />
+    <ClInclude Include="..\src\tiledb\cxx_api\domain.h" />
+    <ClInclude Include="..\src\tiledb\cxx_api\exception.h" />
+    <ClInclude Include="..\src\tiledb\cxx_api\filter.h" />
+    <ClInclude Include="..\src\tiledb\cxx_api\filter_list.h" />
+    <ClInclude Include="..\src\tiledb\cxx_api\group.h" />
+    <ClInclude Include="..\src\tiledb\cxx_api\object.h" />
+    <ClInclude Include="..\src\tiledb\cxx_api\object_iter.h" />
+    <ClInclude Include="..\src\tiledb\cxx_api\query.h" />
+    <ClInclude Include="..\src\tiledb\cxx_api\schema_base.h" />
+    <ClInclude Include="..\src\tiledb\cxx_api\stats.h" />
+    <ClInclude Include="..\src\tiledb\cxx_api\tiledb_enum.h" />
+    <ClInclude Include="..\src\tiledb\cxx_api\type.h" />
+    <ClInclude Include="..\src\tiledb\cxx_api\utils.h" />
+    <ClInclude Include="..\src\tiledb\cxx_api\version.h" />
+    <ClInclude Include="..\src\tiledb\cxx_api\vfs.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="..\src\tiledb_pybind\init_module_pybind.cpp" />
+    <ClCompile Include="..\src\tiledb_pybind\pybind_array.cpp" />
+    <ClCompile Include="..\src\tiledb_pybind\pybind_array_schema.cpp" />
+    <ClCompile Include="..\src\tiledb_pybind\pybind_array_util.cpp" />
+    <ClCompile Include="..\src\tiledb_pybind\pybind_attribute.cpp" />
+    <ClCompile Include="..\src\tiledb_pybind\pybind_config.cpp" />
+    <ClCompile Include="..\src\tiledb_pybind\pybind_context.cpp" />
+    <ClCompile Include="..\src\tiledb_pybind\pybind_core_interface.cpp" />
+    <ClCompile Include="..\src\tiledb_pybind\pybind_dimension.cpp" />
+    <ClCompile Include="..\src\tiledb_pybind\pybind_domain.cpp" />
+    <ClCompile Include="..\src\tiledb_pybind\pybind_exception.cpp" />
+    <ClCompile Include="..\src\tiledb_pybind\pybind_filter.cpp" />
+    <ClCompile Include="..\src\tiledb_pybind\pybind_filter_list.cpp" />
+    <ClCompile Include="..\src\tiledb_pybind\pybind_group.cpp" />
+    <ClCompile Include="..\src\tiledb_pybind\pybind_object.cpp" />
+    <ClCompile Include="..\src\tiledb_pybind\pybind_object_iter.cpp" />
+    <ClCompile Include="..\src\tiledb_pybind\pybind_query.cpp" />
+    <ClCompile Include="..\src\tiledb_pybind\pybind_stats.cpp" />
+    <ClCompile Include="..\src\tiledb_pybind\pybind_tiledb_enum.cpp" />
+    <ClCompile Include="..\src\tiledb_pybind\pybind_type.cpp" />
+    <ClCompile Include="..\src\tiledb_pybind\pybind_utils.cpp" />
+    <ClCompile Include="..\src\tiledb_pybind\pybind_version.cpp" />
+    <ClCompile Include="..\src\tiledb_pybind\pybind_vfs.cpp" />
+  </ItemGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
+  <ImportGroup Label="ExtensionTargets">
+  </ImportGroup>
+</Project>
