@@ -20,6 +20,11 @@ void init_tiledb_Dimension(pybind11::module& m) {
 //ignore_keywords 	std::shared_ptr<tiledb_dimension_t > ptr()
 //ignore_templatefunction 	tiledb::Dimension create( const tiledb::Context & ctx, const std::string & name, const std::array<T, 2> & domain, T extent)
 //ignore_keywords 	tiledb::Dimension create( const tiledb::Context & ctx, const std::string & name, tiledb_datatype_t datatype, const void * domain, const void * extent)
+		.def_static("create_int32_dimension", &tiledb::Dimension::create_int32_dimension, py::arg("ctx"), py::arg("name"), py::arg("bound_lower"), py::arg("bound_upper"), py::arg("extent"))
+		.def_static("create_int64_dimension", &tiledb::Dimension::create_int64_dimension, py::arg("ctx"), py::arg("name"), py::arg("bound_lower"), py::arg("bound_upper"), py::arg("extent"))
+		.def_static("create_uint64_dimension", &tiledb::Dimension::create_uint64_dimension, py::arg("ctx"), py::arg("name"), py::arg("bound_lower"), py::arg("bound_upper"), py::arg("extent"))
+		.def_static("create_double_dimension", &tiledb::Dimension::create_double_dimension, py::arg("ctx"), py::arg("name"), py::arg("bound_lower"), py::arg("bound_upper"), py::arg("extent"))
+		.def_static("create_string_dimension", &tiledb::Dimension::create_string_dimension, py::arg("ctx"), py::arg("name"))
 		;
 
 }

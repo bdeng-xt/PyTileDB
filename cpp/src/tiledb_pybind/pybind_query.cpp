@@ -50,7 +50,6 @@ void init_tiledb_Query(pybind11::module& m) {
 //ignore_templatefunction 	tiledb::Query & set_buffer( const std::string & name, std::vector<uint64_t> & offsets, std::vector<T> & data)
 //ignore_templatefunction 	tiledb::Query & set_buffer( const std::string & name, std::pair<std::vector<uint64_t>, std::vector<T> > & buf)
 		.def("set_buffer", (tiledb::Query & (tiledb::Query::*)(const std::string &,std::vector<uint64_t> &,std::string &))(&tiledb::Query::set_buffer), py::arg("name"), py::arg("offsets"), py::arg("data"))
-		.def("set_string_vector_buffer", &tiledb::Query::set_string_vector_buffer, py::arg("name"), py::arg("buffer"))
 //ignore_keywords 	tiledb::Query & get_buffer( const std::string & name, void * * data, uint64_t * data_nelements, uint64_t * element_size)
 //ignore_keywords 	tiledb::Query & get_buffer( const std::string & name, uint64_t * * offsets, uint64_t * offsets_nelements, void * * data, uint64_t * data_nelements, uint64_t * element_size)
 		.def_static("to_status", &tiledb::Query::to_status, py::arg("status"))

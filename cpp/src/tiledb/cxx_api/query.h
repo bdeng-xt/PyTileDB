@@ -1198,61 +1198,62 @@ class Query {
         sizeof(char));
   }
 
-  void set_string_vector_buffer(
-	  const std::string& name, std::vector<std::string> buffer)
-  {
-	  std::vector<uint64_t> offsets;
-	  int n = (int)buffer.size();
-	  offsets.reserve(n);
-	  std::string data;
-	  for (int i = 0; i < n; ++i)
-	  {
-		  if (i == 0)
-		  {
-			  offsets.push_back(0);
-		  }
-		  else
-		  {
-			  offsets.push_back(offsets[i - 1] + ((uint64_t)buffer[i - 1].size()));
-		  }
-		  data += buffer[i];
-	  }
-
-	//  return set_buffer(name, offsets, data);
-//	      return set_buffer(name,offsets.data(),offsets.size(),&data[0],data.size(),sizeof(char));
-	  // Checks
-	  auto is_attr = schema_.has_attribute(name);
-	  auto is_dim = schema_.domain().has_dimension(name);
-	  if (!is_attr && !is_dim)
-		  throw TileDBError(
-			  std::string("Cannot set buffer; Attribute/Dimension '") + name +
-			  "' does not exist");
-	  else if (is_attr)
-		  impl::type_check<char>(schema_.attribute(name).type());
-	  else if (is_dim)
-		  impl::type_check<char>(schema_.domain().dimension(name).type());
-	  //
-	  size_t data_nelements = data.size();
-	  size_t offset_nelements = offsets.size();
-	  size_t element_size = sizeof(char);
-	  auto ctx = ctx_.get();
-	  auto data_size = data_nelements * element_size;
-	  auto offset_size = offset_nelements * sizeof(uint64_t);
-	  element_sizes_[name] = element_size;
-	  buff_sizes_[name] = std::pair<uint64_t, uint64_t>(offset_size, data_size);
-	  ctx.handle_error(tiledb_query_set_buffer_var(
-		  ctx.ptr().get(),
-		  query_.get(),
-		  name.c_str(),
-		  offsets.data(),
-		  &(buff_sizes_[name].first),
-		  &data[0], //data,
-		  &(buff_sizes_[name].second)));
-
-
-
-  }
-
+//  void set_string_vector_buffer(
+//	  const std::string& name, std::vector<std::string>& buffer)
+//  {
+//	  std::vector<uint64_t> offsets;
+//	  int n = (int)buffer.size();
+//	  offsets.reserve(n);
+//	  std::string data; //std::vector<char> data; // 
+//	 // data.reserve(n);
+//	  for (int i = 0; i < n; ++i)
+//	  {
+//		  if (i == 0)
+//		  {
+//			  offsets.push_back(0);
+//		  }
+//		  else
+//		  {
+//			  offsets.push_back(offsets[i - 1] + ((uint64_t)buffer[i - 1].size()));
+//		  }
+//		  data += buffer[i];
+//	  }
+//
+//	//  return set_buffer(name, offsets, data);
+////	      return set_buffer(name,offsets.data(),offsets.size(),&data[0],data.size(),sizeof(char));
+//	  // Checks
+//	  auto is_attr = schema_.has_attribute(name);
+//	  auto is_dim = schema_.domain().has_dimension(name);
+//	  if (!is_attr && !is_dim)
+//		  throw TileDBError(
+//			  std::string("Cannot set buffer; Attribute/Dimension '") + name +
+//			  "' does not exist");
+//	  else if (is_attr)
+//		  impl::type_check<char>(schema_.attribute(name).type());
+//	  else if (is_dim)
+//		  impl::type_check<char>(schema_.domain().dimension(name).type());
+//	  //
+//	  size_t data_nelements = data.size();
+//	  size_t offset_nelements = offsets.size();
+//	  size_t element_size = sizeof(char);
+//	  auto ctx = ctx_.get();
+//	  auto data_size = data_nelements * element_size;
+//	  auto offset_size = offset_nelements * sizeof(uint64_t);
+//	  element_sizes_[name] = element_size;
+//	  buff_sizes_[name] = std::pair<uint64_t, uint64_t>(offset_size, data_size);
+//	  ctx.handle_error(tiledb_query_set_buffer_var(
+//		  ctx.ptr().get(),
+//		  query_.get(),
+//		  name.c_str(),
+//		  offsets.data(),
+//		  &(buff_sizes_[name].first),
+//		  &data[0], //data,
+//		  &(buff_sizes_[name].second)));
+//
+//
+//
+//  }
+//
   /**
    * Gets a buffer for a fixed-sized attribute/dimension.
    *

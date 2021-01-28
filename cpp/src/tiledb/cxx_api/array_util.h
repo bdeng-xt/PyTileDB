@@ -14,6 +14,7 @@
 */
 
 #include <limits>
+#include <codecvt>
 
 #include "array.h"
 #include "array_schema.h"
@@ -508,6 +509,7 @@ public:
 		result.reserve(offsets_sz);
 		for (size_t i = 0; i < offsets_sz; ++i)
 		{
+			
 			result.push_back(std::string(&str_result[offsets[i]], result_str_sizes[i]));
 		}
 		arr.close();
@@ -667,6 +669,14 @@ public:
 		int ncols = table->num_columns();
 		int64_t nrows = table->num_rows();
 
+		//default compression is gzip with level 6
+		tiledb::FilterList filter_list(ctx);
+		tiledb::Filter filter(ctx, tiledb_filter_type_t::TILEDB_FILTER_GZIP); 
+		int level = 6;
+		filter.set_option(tiledb_filter_option_t::TILEDB_COMPRESSION_LEVEL, &level);
+		filter_list.add_filter(filter);
+	
+
 		tiledb::ArraySchema schema(ctx, tiledb_array_type_t::TILEDB_SPARSE);
 
 		tiledb::Domain domain(ctx);
@@ -675,6 +685,7 @@ public:
 		{
 			const std::shared_ptr<arrow::Field>& field = table->field(i);// (*itfield);
 			tiledb_datatype_t tiledb_datatype = arrow_datatype_to_tiledb(field->type());
+			
 	 
 			if ((field->HasMetadata() && field->metadata()->Contains("isdim")
 				&& (field->metadata()->Get("isdim").ok()))
@@ -682,24 +693,31 @@ public:
 				)
 			{
 				std::string min_str = "";
-				auto min_result = field->metadata()->Get("min");
-				if (min_result.ok())
-				{
-					min_str = min_result.ValueUnsafe();
-				}
 				std::string max_str = "";
-				auto max_result = field->metadata()->Get("max");
-				if (max_result.ok())
+				if (field->HasMetadata())
 				{
-					max_str = max_result.ValueUnsafe();
+					auto min_result = field->metadata()->Get("min");
+					if (min_result.ok())
+					{
+						min_str = min_result.ValueUnsafe();
+					}
+
+					auto max_result = field->metadata()->Get("max");
+					if (max_result.ok())
+					{
+						max_str = max_result.ValueUnsafe();
+					}
 				}
-				//if (field->name() == "rows" && min_str.empty() && max_str.empty())
-				//{
-				//	min_str = "0";
-				//	std::stringstream ssmax;
-				//	ssmax << (nrows-1);
-				//	max_str = ssmax.str();
-				//}
+
+				
+
+				if (field->name() == "rows" && min_str.empty() && max_str.empty())
+				{
+					min_str = "0";
+					std::stringstream ssmax;
+					ssmax << (nrows-1);
+					max_str = ssmax.str();
+				}
 				
 				std::cout << "start to add dimension:" << field->name() << ",min_str:" << min_str
 					<< ",max_str:" << max_str << std::endl;
@@ -714,7 +732,7 @@ public:
 				{
 					tiledb::Dimension dim = tiledb::Dimension::create(ctx, field->name(), tiledb_datatype_t::TILEDB_STRING_ASCII, nullptr, nullptr);
 //					dim.set_cell_val_num(TILEDB_VAR_NUM);
-					//dim.set_filter_list()
+					dim.set_filter_list(filter_list);
 					domain.add_dimension(dim);
 					std::cout << "added string dimension:" << field->name() << std::endl;
 				}
@@ -731,7 +749,7 @@ public:
 					}
 
 					tiledb::Dimension dim = tiledb::Dimension::create<int>(ctx, field->name(), bound, extent);
-					//dim.set_filter_list()
+					dim.set_filter_list(filter_list);
 					domain.add_dimension(dim);
 					std::cout << "added int32 dimension:" << field->name() << std::endl;
 				}
@@ -749,7 +767,7 @@ public:
 
 					tiledb::Dimension dim = tiledb::Dimension::create<uint32_t>(ctx, field->name(), bound, extent);
 
-					//dim.set_filter_list()
+					dim.set_filter_list(filter_list);
 					domain.add_dimension(dim);
 					std::cout << "added uint32 dimension:" << field->name() << std::endl;
 				}
@@ -765,7 +783,7 @@ public:
 						bound[1] = atoll(max_str.c_str());
 					}
 					tiledb::Dimension dim = tiledb::Dimension::create<int64_t>(ctx, field->name(), bound, extent);
-					//dim.set_filter_list()
+					dim.set_filter_list(filter_list);
 					domain.add_dimension(dim);
 					std::cout << "added int64 dimension:" << field->name() << std::endl;
 				}
@@ -781,7 +799,7 @@ public:
 						bound[1] = atoll(max_str.c_str());
 					}
 					tiledb::Dimension dim = tiledb::Dimension::create<uint64_t>(ctx, field->name(), bound, extent);
-					//dim.set_filter_list()
+					dim.set_filter_list(filter_list);
 					domain.add_dimension(dim);
 					std::cout << "added uint64 dimension:" << field->name() << std::endl;
 				}
@@ -798,7 +816,7 @@ public:
 					}
 
 					tiledb::Dimension dim = tiledb::Dimension::create<double>(ctx, field->name(), bound, 10);
-					//dim.set_filter_list()
+					dim.set_filter_list(filter_list);
 					domain.add_dimension(dim);
 					std::cout << "added float64 dimension:" << field->name() << std::endl;
 				}
@@ -811,6 +829,7 @@ public:
 			 
 		}//for (auto itfield = table->fields().begin(); itfield != table->fields().end(); ++itfield)
 		std::cout << "start to check dimension..." << std::endl;
+		bool added_dim_rows = false;
 		if (domain.ndim() == 0)
 		{
 			uint64_t extent = 10;
@@ -819,9 +838,9 @@ public:
 			bound[1] = table->num_rows()-1;// (std::numeric_limits<uint64_t>::max() / extent) - extent; // // ;
 
 			tiledb::Dimension dim = tiledb::Dimension::create<uint64_t>(ctx, "rows", bound, extent);
-			//dim.set_filter_list()
+			dim.set_filter_list(filter_list);
 			domain.add_dimension(dim);
-			 
+			added_dim_rows=true;
 		}
 //		std::cout << "start to set domain..." << std::endl;
 
@@ -852,36 +871,42 @@ public:
 			{
 				tiledb::Attribute attr = tiledb::Attribute::create<std::string>(ctx, field->name());//  //attr(ctx, field->name(), tiledb_datatype);
 //				attr.set_cell_val_num(TILEDB_VAR_NUM);
+				attr.set_filter_list(filter_list);
 				schema.add_attribute(attr);
 				std::cout << "added string attribute:" << field->name() << ",datatype:" << tiledb_datatype << std::endl;
 			}
 			else if (tiledb_datatype == tiledb_datatype_t::TILEDB_INT32)
 			{
 				tiledb::Attribute attr = tiledb::Attribute::create<int>(ctx, field->name());
+				attr.set_filter_list(filter_list);
 				schema.add_attribute(attr);
 				std::cout << "added int attribute:" << field->name() << ",datatype:" << tiledb_datatype << std::endl;
 			}
 			else if (tiledb_datatype == tiledb_datatype_t::TILEDB_INT64)
 			{
 				tiledb::Attribute attr = tiledb::Attribute::create<int64_t>(ctx, field->name());
+				attr.set_filter_list(filter_list);
 				schema.add_attribute(attr);
 				std::cout << "added int64 attribute:" << field->name() << ",datatype:" << tiledb_datatype << std::endl;
 			}
 			else if (tiledb_datatype == tiledb_datatype_t::TILEDB_UINT32)
 			{
 				tiledb::Attribute attr = tiledb::Attribute::create<uint32_t>(ctx, field->name());
+				attr.set_filter_list(filter_list);
 				schema.add_attribute(attr);
 				std::cout << "added uint32_t attribute:" << field->name() << ",datatype:" << tiledb_datatype << std::endl;
 			}
 			else if (tiledb_datatype == tiledb_datatype_t::TILEDB_UINT64)
 			{
 				tiledb::Attribute attr = tiledb::Attribute::create<uint64_t>(ctx, field->name());
+				attr.set_filter_list(filter_list);
 				schema.add_attribute(attr);
 				std::cout << "added uint64_t attribute:" << field->name() << ",datatype:" << tiledb_datatype << std::endl;
 			}
 			else if (tiledb_datatype == tiledb_datatype_t::TILEDB_FLOAT64)
 			{
 				tiledb::Attribute attr = tiledb::Attribute::create<double>(ctx, field->name());
+				attr.set_filter_list(filter_list);
 				schema.add_attribute(attr);
 				std::cout << "added double attribute:" << field->name() << ",datatype:" << tiledb_datatype << std::endl;
 			}
@@ -900,7 +925,29 @@ public:
 		tiledb::Array arr(ctx, uri, tiledb_query_type_t::TILEDB_WRITE);
 		tiledb::Query query(ctx, arr, tiledb_query_type_t::TILEDB_WRITE);
 		query.set_layout(tiledb_layout_t::TILEDB_UNORDERED);
+
+		std::unordered_map<std::string, std::vector<int64_t> > int64_vector_map;
+		std::unordered_map<std::string, std::vector<int> > int32_vector_map;
+		std::unordered_map<std::string, std::vector<uint64_t> > uint64_vector_map;
+		std::unordered_map<std::string, std::vector<uint32_t> > uint32_vector_map;
+		std::unordered_map<std::string, std::vector<double> > double_vector_map;
+
+		std::unordered_map<std::string, std::string > string_buffer_map;
+		std::unordered_map<std::string, std::vector<uint64_t> > string_buffer_offset_map;
  
+		if (added_dim_rows)
+		{
+			uint64_vector_map["rows"] = std::vector<uint64_t>();
+			auto& data_rows = uint64_vector_map["rows"];
+			data_rows.reserve(table->num_rows());
+			for (int i = 0; i < table->num_rows(); ++i)
+			{
+				data_rows.push_back(i);
+			}
+			std::cout << "start to set uint64 field:rows,num_rows:" << table->num_rows() << std::endl;
+			query.set_uint64_vector_buffer("rows", data_rows);
+		}
+
 		for (int i = 0; i < nfields; ++i) //(auto itfield = table->fields().begin(); itfield != table->fields().end(); ++itfield)
 		{
 			const std::shared_ptr<arrow::Field>& field = table->field(i);// (*itfield);
@@ -911,29 +958,30 @@ public:
 		
 			if (arrow_datatype->id() == arrow::Type::STRING)
 			{
-				std::vector<std::string> data;
-				data.reserve(table->num_rows());
-				for (auto itchunk = arrow_arr->chunks().begin(); itchunk != arrow_arr->chunks().end(); ++itchunk)
+				string_buffer_map[field->name()] = "";
+				string_buffer_offset_map[field->name()] = std::vector<uint64_t>();
+
+				std::string& data = string_buffer_map[field->name()];
+				std::vector<uint64_t>& offsets = string_buffer_offset_map[field->name()];
+
+				int status = get_data_offsets_for_arrow_table_string_field(table, i, data, offsets);
+				if (status != 0)
 				{
-					auto arrow_array = std::static_pointer_cast<arrow::StringArray>(*itchunk);
-					for (int64_t i = 0; i < arrow_array->length(); ++i)
-					{
-						data.push_back(arrow_array->GetString(i));
-					}
+					std::cout << "failed to get data buffer for tiledb from arrow table!" << std::endl;
+					continue;
 				}
-				std::cout << "start to set string field:" << field->name() << ",num_rows:" << table->num_rows() <<",datasize:" << data.size() << std::endl;
-				for (int iprint = 0; i < data.size() && iprint < 10; iprint++)
-				{
-					std::cout << "," << data[i];
-				}
-				std::cout << std::endl;
-				query.set_string_vector_buffer(field->name(), data);
+
+	
+				std::cout << "start to set string field:" << field->name()  <<",datasize:" << data.size() << std::endl;
+  
+				query.set_buffer(field->name(), offsets, data);
+				 
 				
 			}
 			else if (arrow_datatype->id() == arrow::Type::INT32)
 			{
- 
-				std::vector<int> data;
+				int32_vector_map[field->name()] = std::vector<int>();
+				std::vector<int>& data = int32_vector_map[field->name()];
 				data.reserve(table->num_rows());
 				for (auto itchunk = arrow_arr->chunks().begin(); itchunk != arrow_arr->chunks().end(); ++itchunk)
 				{
@@ -943,13 +991,13 @@ public:
 						data.push_back(arrow_array->Value(i));
 					}
 				}
-				std::cout << "start to set int32 field:" << field->name() << ",num_rows:" << table->num_rows() << ",datasize:" << data.size() << std::endl;
+				std::cout << "start to set int32 field:" << field->name()  << ",datasize:" << data.size() << std::endl;
 				query.set_int32_vector_buffer(field->name(), data);
 			}
 			else if (arrow_datatype->id() == arrow::Type::UINT32)
 			{
- 
-				std::vector<uint32_t> data;
+				uint32_vector_map[field->name()] = std::vector<uint32_t>();
+				std::vector<uint32_t>& data = uint32_vector_map[field->name()];
 				data.reserve(table->num_rows());
 				for (auto itchunk = arrow_arr->chunks().begin(); itchunk != arrow_arr->chunks().end(); ++itchunk)
 				{
@@ -959,13 +1007,13 @@ public:
 						data.push_back(arrow_array->Value(i));
 					}
 				}
-				std::cout << "start to set uint32 field:" << field->name() << ",num_rows:" << table->num_rows() << ",datasize:" << data.size() << std::endl;
+				std::cout << "start to set uint32 field:" << field->name()  << ",datasize:" << data.size() << std::endl;
 				query.set_uint32_vector_buffer(field->name(), data);
 			}
 			else if (arrow_datatype->id() == arrow::Type::INT64)
 			{
- 
-				std::vector<int64_t> data;
+				int64_vector_map[field->name()] = std::vector<int64_t>();
+				std::vector<int64_t>& data = int64_vector_map[field->name()];
 				data.reserve(table->num_rows());
 				for (auto itchunk = arrow_arr->chunks().begin(); itchunk != arrow_arr->chunks().end(); ++itchunk)
 				{
@@ -975,13 +1023,13 @@ public:
 						data.push_back(arrow_array->Value(i));
 					}
 				}
-				std::cout << "start to set int64 field:" << field->name() << ",num_rows:" << table->num_rows() << ",datasize:" << data.size() << std::endl;
+				std::cout << "start to set int64 field:" << field->name()  << ",datasize:" << data.size() << std::endl;
 				query.set_int64_vector_buffer(field->name(), data);
 			}
 			else if (arrow_datatype->id() == arrow::Type::UINT64)
 			{
- 
-				std::vector<uint64_t> data;
+				uint64_vector_map[field->name()] = std::vector<uint64_t>();
+				std::vector<uint64_t>& data = uint64_vector_map[field->name()];
 				data.reserve(table->num_rows());
 				for (auto itchunk = arrow_arr->chunks().begin(); itchunk != arrow_arr->chunks().end(); ++itchunk)
 				{
@@ -991,13 +1039,13 @@ public:
 						data.push_back(arrow_array->Value(i));
 					}
 				}
-				std::cout << "start to set uint64 field:" << field->name() << ",num_rows:" << table->num_rows() << ",datasize:" << data.size() << std::endl;
+				std::cout << "start to set uint64 field:" << field->name() << ",datasize:" << data.size() << std::endl;
 				query.set_uint64_vector_buffer(field->name(), data);
 			}
 			else if (arrow_datatype->id() == arrow::Type::DOUBLE)
 			{
- 
-				std::vector<double> data;
+				double_vector_map[field->name()] = std::vector<double>();
+				std::vector<double>& data = double_vector_map[field->name()];
 				data.reserve(table->num_rows());
 				for (auto itchunk = arrow_arr->chunks().begin(); itchunk != arrow_arr->chunks().end(); ++itchunk)
 				{
@@ -1007,7 +1055,7 @@ public:
 						data.push_back(arrow_array->Value(i));
 					}
 				}
-				std::cout << "start to set double field:" << field->name() << ",num_rows:" << table->num_rows() << ",datasize:" << data.size() << std::endl;
+				std::cout << "start to set double field:" << field->name()  << ",datasize:" << data.size() << std::endl;
 				query.set_double_vector_buffer(field->name(), data);
 			}
 			else
@@ -1062,13 +1110,82 @@ public:
 
 
 protected:
+	static int get_data_offsets_for_arrow_table_string_field(const std::shared_ptr<arrow::Table> & table, int i, std::string& data, std::vector<uint64_t>& offsets)
+	{
+		if (!table)
+		{
+			//null pointer
+			return -1;
+		}
+		if (i < 0 || i >= table->fields().size())
+		{
+			//out of range
+			return -1;
+		}
+
+		const std::shared_ptr<arrow::Field>& field = table->field(i);// (*itfield);
+		std::shared_ptr<arrow::DataType> arrow_datatype = field->type();
+		if (arrow_datatype->id() != arrow::Type::STRING)
+		{
+			//not correct type
+			return -1;
+		}
+
+		tiledb_datatype_t tiledb_datatype = arrow_datatype_to_tiledb(field->type());
+		auto arrow_arr = table->GetColumnByName(field->name());
+
+		data = "";
+		offsets.clear();
+		data.reserve(table->num_rows());
+		offsets.reserve(table->num_rows());
+		int count = 0;
+		uint64_t offset = 0;
+		for (auto itchunk = arrow_arr->chunks().begin(); itchunk != arrow_arr->chunks().end(); ++itchunk)
+		{
+			auto arrow_array = std::static_pointer_cast<arrow::StringArray>(*itchunk);
+			for (int64_t i = 0; i < arrow_array->length(); ++i)
+			{
+				std::string s = arrow_array->GetString(i);
+				data += s;
+				offsets.push_back(offset);
+				offset += s.size();
+			}
+			++count;
+		}
+
+		return 0;
+	}//static int get_data_offsets_for_arrow_table_string_field(const std::shared_ptr<arrow::Table> & table, int i, std::string& data, std::vector<uint64_t>& offsets)
+	static int get_data_offsets_for_string_vector(const std::vector<std::string>& buffer, std::string& data, std::vector<uint64_t>& offsets)
+	{
+	 
+		int n = (int)buffer.size();
+		offsets.clear();
+		offsets.reserve(n);
+		data = "";
+		data.reserve(n);
+	 
+		for (int i = 0; i < n; ++i)
+		{
+			if (i == 0)
+			{
+				offsets.push_back(0);
+			}
+			else
+			{
+				offsets.push_back(offsets[i - 1] + ((uint64_t)buffer[i - 1].size()));
+			}
+			data += buffer[i];
+		}
+		return 0;
+	}
+
 	static tiledb_datatype_t arrow_datatype_to_tiledb(const std::shared_ptr<arrow::DataType> & data_type)
 	{
 		//TODO: add more datatype mapping
 		switch (data_type->id())
 		{
 		case arrow::Type::STRING:
-			return tiledb_datatype_t::TILEDB_STRING_UTF8;
+			return tiledb_datatype_t::TILEDB_STRING_ASCII;//  TILEDB_STRING_UTF8;
 		case arrow::Type::INT32:
 			return tiledb_datatype_t::TILEDB_INT32;
 		case arrow::Type::INT64:
