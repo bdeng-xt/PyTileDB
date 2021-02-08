@@ -48,18 +48,6 @@ void init_tiledb_ArraySchema(pybind11::module& m) {
 		.def("dimension", (tiledb::Dimension (tiledb::ArraySchema::*)(const std::string &) const)(&tiledb::ArraySchema::dimension), py::arg("name"))
 		.def("add_int_dimension", &tiledb::ArraySchema::add_int_dimension, py::arg("name"), py::arg("lower"), py::arg("upper"), py::arg("extent"))
 		.def("add_attribute", (void (tiledb::ArraySchema::*)(const std::string &,tiledb_datatype_t))(&tiledb::ArraySchema::add_attribute), py::arg("name"), py::arg("type"))
-		.def("coords_filter_names", &tiledb::ArraySchema::coords_filter_names)
-		.def("offsets_filter_names", &tiledb::ArraySchema::offsets_filter_names)
-		.def("dimension_filter_names", &tiledb::ArraySchema::dimension_filter_names, py::arg("name"))
-		.def("attribute_filter_names", &tiledb::ArraySchema::attribute_filter_names, py::arg("name"))
-		.def("add_coords_filter_by_name", &tiledb::ArraySchema::add_coords_filter_by_name, py::arg("filter_name"))
-		.def("add_offsets_filter_by_name", &tiledb::ArraySchema::add_offsets_filter_by_name, py::arg("filter_name"))
-		.def("add_dimension_filter_by_name", &tiledb::ArraySchema::add_dimension_filter_by_name, py::arg("dim_name"), py::arg("filter_name"))
-		.def("add_attribute_filter_by_name", &tiledb::ArraySchema::add_attribute_filter_by_name, py::arg("dim_name"), py::arg("filter_name"))
-		.def("add_coords_filter_by_type", &tiledb::ArraySchema::add_coords_filter_by_type, py::arg("filter_type"))
-		.def("add_offsets_filter_by_type", &tiledb::ArraySchema::add_offsets_filter_by_type, py::arg("filter_type"))
-		.def("add_dimension_filter_by_type", &tiledb::ArraySchema::add_dimension_filter_by_type, py::arg("dim_name"), py::arg("filter_type"))
-		.def("add_attribute_filter_by_type", &tiledb::ArraySchema::add_attribute_filter_by_type, py::arg("dim_name"), py::arg("filter_type"))
 		.def("to_json_str", &tiledb::ArraySchema::to_json_str)
 		;
 

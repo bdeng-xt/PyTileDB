@@ -135,6 +135,7 @@ workspace "pytiledb" --solution "xtcommon"
 --			"../../cpp/src/xtboost/**.cpp",   
 			"../src/tiledb_pybind/*.cpp",
 			"../src/tiledb/cxx_api/*.h",
+			"../src/tiledb/cxx_api/*.cc",
 
 		}		
 		excludes

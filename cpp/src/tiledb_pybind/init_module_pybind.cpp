@@ -11,6 +11,8 @@
 
 #include "pybind_attribute.h" 
 
+#include "pybind_column.h" 
+
 #include "pybind_config.h" 
 
 #include "pybind_context.h" 
@@ -36,6 +38,8 @@
 #include "pybind_query.h" 
 
 #include "pybind_stats.h" 
+
+#include "pybind_string_util.h" 
 
 #include "pybind_tiledb_enum.h" 
 
@@ -65,6 +69,11 @@ PYBIND11_MODULE(pytiledb, m)
 
 //file:../../../bdeng-xt/PyTileDB/cpp/src/tiledb/cxx_api/attribute.h
 	init_tiledb_Attribute(m);
+
+//file:../../../bdeng-xt/PyTileDB/cpp/src/tiledb/cxx_api/column.h
+	init_tiledb_ColumnData(m);
+	init_tiledb_StringColumnData(m);
+	init_tiledb_ColumnDataMap(m);
 
 //file:../../../bdeng-xt/PyTileDB/cpp/src/tiledb/cxx_api/config.h
 	init_tiledb_Config(m);
@@ -105,6 +114,9 @@ PYBIND11_MODULE(pytiledb, m)
 
 //file:../../../bdeng-xt/PyTileDB/cpp/src/tiledb/cxx_api/stats.h
 	init_tiledb_Stats(m);
+
+//file:../../../bdeng-xt/PyTileDB/cpp/src/tiledb/cxx_api/string_util.h
+	init_tiledb_StringUtil(m);
 
 //file:../../../bdeng-xt/PyTileDB/cpp/src/tiledb/cxx_api/tiledb_enum.h
 	init__tiledb_query_type_t(m);

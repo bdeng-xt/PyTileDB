@@ -55,6 +55,7 @@
     <ClInclude Include="..\src\tiledb\cxx_api\array_schema.h" />
     <ClInclude Include="..\src\tiledb\cxx_api\array_util.h" />
     <ClInclude Include="..\src\tiledb\cxx_api\attribute.h" />
+    <ClInclude Include="..\src\tiledb\cxx_api\column.h" />
     <ClInclude Include="..\src\tiledb\cxx_api\config.h" />
     <ClInclude Include="..\src\tiledb\cxx_api\context.h" />
     <ClInclude Include="..\src\tiledb\cxx_api\core_interface.h" />
@@ -70,6 +71,7 @@
     <ClInclude Include="..\src\tiledb\cxx_api\query.h" />
     <ClInclude Include="..\src\tiledb\cxx_api\schema_base.h" />
     <ClInclude Include="..\src\tiledb\cxx_api\stats.h" />
+    <ClInclude Include="..\src\tiledb\cxx_api\string_util.h" />
     <ClInclude Include="..\src\tiledb\cxx_api\tiledb_enum.h" />
     <ClInclude Include="..\src\tiledb\cxx_api\type.h" />
     <ClInclude Include="..\src\tiledb\cxx_api\utils.h" />
@@ -77,11 +79,16 @@
     <ClInclude Include="..\src\tiledb\cxx_api\vfs.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="..\src\tiledb\cxx_api\array_util.cc" />
+    <ClCompile Include="..\src\tiledb\cxx_api\column.cc" />
+    <ClCompile Include="..\src\tiledb\cxx_api\string_util.cc" />
+    <ClCompile Include="..\src\tiledb_pybind\init_module_common.cpp" />
     <ClCompile Include="..\src\tiledb_pybind\init_module_pybind.cpp" />
     <ClCompile Include="..\src\tiledb_pybind\pybind_array.cpp" />
     <ClCompile Include="..\src\tiledb_pybind\pybind_array_schema.cpp" />
     <ClCompile Include="..\src\tiledb_pybind\pybind_array_util.cpp" />
     <ClCompile Include="..\src\tiledb_pybind\pybind_attribute.cpp" />
+    <ClCompile Include="..\src\tiledb_pybind\pybind_column.cpp" />
     <ClCompile Include="..\src\tiledb_pybind\pybind_config.cpp" />
     <ClCompile Include="..\src\tiledb_pybind\pybind_context.cpp" />
     <ClCompile Include="..\src\tiledb_pybind\pybind_core_interface.cpp" />
@@ -95,6 +102,7 @@
     <ClCompile Include="..\src\tiledb_pybind\pybind_object_iter.cpp" />
     <ClCompile Include="..\src\tiledb_pybind\pybind_query.cpp" />
     <ClCompile Include="..\src\tiledb_pybind\pybind_stats.cpp" />
+    <ClCompile Include="..\src\tiledb_pybind\pybind_string_util.cpp" />
     <ClCompile Include="..\src\tiledb_pybind\pybind_tiledb_enum.cpp" />
     <ClCompile Include="..\src\tiledb_pybind\pybind_type.cpp" />
     <ClCompile Include="..\src\tiledb_pybind\pybind_utils.cpp" />

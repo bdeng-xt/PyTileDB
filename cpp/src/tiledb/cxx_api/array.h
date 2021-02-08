@@ -590,7 +590,7 @@ class Array {
     ctx.handle_error(
         tiledb_array_get_schema(c_ctx, array_.get(), &array_schema));
     schema_ = tiledb::ArraySchema(ctx, array_schema);
-  }
+  } 
 
   /** Returns the timestamp at which the array was opened. */
   uint64_t timestamp() const {

@@ -21,6 +21,8 @@ void init_tiledb_Attribute(pybind11::module& m) {
 //ignore_keywords 	void dump( FILE * out)
 //ignore_templatefunction 	tiledb::Attribute create( const tiledb::Context & ctx, const std::string & name)
 //ignore_templatefunction 	tiledb::Attribute create( const tiledb::Context & ctx, const std::string & name, const tiledb::FilterList & filter_list)
+		.def_static("is_valid_intdatatype", &tiledb::Attribute::is_valid_intdatatype, py::arg("intdatatype"))
+		.def_static("create_attribute", &tiledb::Attribute::create_attribute, py::arg("ctx"), py::arg("name"), py::arg("datatype"))
 		;
 
 }

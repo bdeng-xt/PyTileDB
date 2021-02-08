@@ -339,6 +339,129 @@ class Attribute {
     return a;
   }
 
+  static bool is_valid_intdatatype(int intdatatype)
+  {
+	  if (intdatatype == (int)TILEDB_INT8
+		  || intdatatype == (int)TILEDB_UINT8
+		  || intdatatype == (int)TILEDB_INT16
+		  || intdatatype == (int)TILEDB_UINT16
+		  || intdatatype == (int)TILEDB_INT32
+		  || intdatatype == (int)TILEDB_UINT32
+		  || intdatatype == (int)TILEDB_INT64
+		  || intdatatype == (int)TILEDB_UINT64
+		  || intdatatype == (int)TILEDB_FLOAT32
+		  || intdatatype == (int)TILEDB_FLOAT64
+		  || intdatatype == (int)TILEDB_DATETIME_YEAR
+		  || intdatatype == (int)TILEDB_DATETIME_MONTH
+		  || intdatatype == (int)TILEDB_DATETIME_WEEK
+		  || intdatatype == (int)TILEDB_DATETIME_DAY
+		  || intdatatype == (int)TILEDB_DATETIME_HR
+		  || intdatatype == (int)TILEDB_DATETIME_MIN
+		  || intdatatype == (int)TILEDB_DATETIME_SEC
+		  || intdatatype == (int)TILEDB_DATETIME_MS
+		  || intdatatype == (int)TILEDB_DATETIME_US
+		  || intdatatype == (int)TILEDB_DATETIME_NS
+		  || intdatatype == (int)TILEDB_DATETIME_PS
+		  || intdatatype == (int)TILEDB_DATETIME_FS
+		  || intdatatype == (int)TILEDB_DATETIME_AS
+		  || intdatatype == (int)TILEDB_STRING_ASCII
+		  || intdatatype == (int)TILEDB_CHAR
+		  || intdatatype == (int)TILEDB_STRING_UTF8
+		  || intdatatype == (int)TILEDB_STRING_UTF16
+		  || intdatatype == (int)TILEDB_STRING_UTF32
+		  || intdatatype == (int)TILEDB_STRING_UCS2
+		  || intdatatype == (int)TILEDB_STRING_UCS4
+		  || intdatatype == (int)TILEDB_ANY
+		  )
+	  {
+		  return true;
+	  }
+	  else
+	  {
+		  return false;
+	  }
+  }
+
+  static tiledb::Attribute create_attribute(const tiledb::Context& ctx,
+	  const std::string& name, tiledb_datatype_t datatype)
+  {
+	  if (datatype == TILEDB_INT8)
+	  {
+		  return create<int8_t>(ctx, name);
+	  }
+	  else if (datatype == TILEDB_UINT8)
+	  {
+		  return create<uint8_t>(ctx, name);
+	  }
+	  else if (datatype == TILEDB_INT16)
+	  {
+		  return create<int16_t>(ctx, name);
+	  }
+	  else if (datatype == TILEDB_UINT16)
+	  {
+		  return create<uint16_t>(ctx, name);
+	  }
+	  else if (datatype == TILEDB_INT32)
+	  {
+		  return create<int32_t>(ctx, name);
+	  }
+	  else if (datatype == TILEDB_UINT32)
+	  {
+		  return create<uint32_t>(ctx, name);
+	  }
+	  else if (datatype == TILEDB_INT64)
+	  {
+		  return create<int64_t>(ctx, name);
+	  }
+	  else if (datatype == TILEDB_UINT64)
+	  {
+		  return create<uint64_t>(ctx, name);
+	  }
+	  else if (datatype == TILEDB_FLOAT32)
+	  {
+		  return create<float>(ctx, name);
+	  }
+	  else if (datatype == TILEDB_FLOAT64)
+	  {
+		  return create<double>(ctx, name);
+	  }
+	  else if (datatype == TILEDB_DATETIME_YEAR
+		  || datatype == TILEDB_DATETIME_MONTH
+		  || datatype == TILEDB_DATETIME_WEEK
+		  || datatype == TILEDB_DATETIME_DAY
+		  || datatype == TILEDB_DATETIME_HR
+		  || datatype == TILEDB_DATETIME_MIN
+		  || datatype == TILEDB_DATETIME_SEC
+		  || datatype == TILEDB_DATETIME_MS
+		  || datatype == TILEDB_DATETIME_US
+		  || datatype == TILEDB_DATETIME_NS
+		  || datatype == TILEDB_DATETIME_PS
+		  || datatype == TILEDB_DATETIME_FS
+		  || datatype == TILEDB_DATETIME_AS)
+	  {
+		  return create<int64_t>(ctx, name);
+	  }
+	  else if (datatype == TILEDB_STRING_ASCII)
+	  {
+		  return create<std::string>(ctx, name);
+	  }
+	  else if (datatype == TILEDB_CHAR
+		  || datatype == TILEDB_STRING_UTF8
+		  || datatype == TILEDB_STRING_UTF16
+		  || datatype == TILEDB_STRING_UTF32
+		  || datatype == TILEDB_STRING_UCS2
+		  || datatype == TILEDB_STRING_UCS4
+		  || datatype == TILEDB_ANY
+		  ) {
+		  return create<std::string>(ctx, name);
+ 
+	  }
+	  else {
+		  return create<std::string>(ctx, name);
+ 
+	  }
+  }
+
  private:
   /* ********************************* */
   /*         PRIVATE ATTRIBUTES        */

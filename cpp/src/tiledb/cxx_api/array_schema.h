@@ -773,59 +773,7 @@ public:
 
 	}
 
-	std::vector<std::string> coords_filter_names()
-	{
-		std::vector<std::string> result;
-		return result;
-	}
-
-	std::vector<std::string> offsets_filter_names()
-	{
-		std::vector<std::string> result;
-		return result;
-	}
-
-	std::vector<std::string> dimension_filter_names(const std::string& name)
-	{
-		std::vector<std::string> result;
-		return result;
-	}
-
-	std::vector<std::string> attribute_filter_names(const std::string& name)
-	{
-		std::vector<std::string> result;
-		return result;
-	}
-
-	void add_coords_filter_by_name(const std::string& filter_name)
-	{
-	}
-	void add_offsets_filter_by_name(const std::string& filter_name)
-	{
-	}
-
-	void add_dimension_filter_by_name(const std::string& dim_name, const std::string& filter_name)
-	{
-	}
-
-	void add_attribute_filter_by_name(const std::string& dim_name, const std::string& filter_name)
-	{
-	}
-
-	void add_coords_filter_by_type(tiledb_filter_type_t filter_type)
-	{
-	}
-	void add_offsets_filter_by_type(tiledb_filter_type_t filter_type)
-	{
-	}
-
-	void add_dimension_filter_by_type(const std::string& dim_name, tiledb_filter_type_t filter_type)
-	{
-	}
-
-	void add_attribute_filter_by_type(const std::string& dim_name, tiledb_filter_type_t filter_type)
-	{
-	}
+ 
 
 	/** Returns in json string format. */
 	std::string to_json_str() {
