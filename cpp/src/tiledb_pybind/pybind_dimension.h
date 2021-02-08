@@ -3,6 +3,7 @@
 #define TILEDB_PYBIND_DIMENSION_H
 
 #include "common_include.h" 
+#include "init_module_common.h"
 
 
 #include "dimension.h"

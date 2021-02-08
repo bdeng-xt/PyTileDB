@@ -3,6 +3,7 @@
 #define TILEDB_PYBIND_ARRAY_SCHEMA_H
 
 #include "common_include.h" 
+#include "init_module_common.h"
 
 
 #include "array_schema.h"

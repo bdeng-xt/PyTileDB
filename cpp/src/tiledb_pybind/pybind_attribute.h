@@ -3,6 +3,7 @@
 #define TILEDB_PYBIND_ATTRIBUTE_H
 
 #include "common_include.h" 
+#include "init_module_common.h"
 
 
 #include "attribute.h"

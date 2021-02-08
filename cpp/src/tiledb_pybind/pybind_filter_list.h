@@ -3,6 +3,7 @@
 #define TILEDB_PYBIND_FILTER_LIST_H
 
 #include "common_include.h" 
+#include "init_module_common.h"
 
 
 #include "filter_list.h"

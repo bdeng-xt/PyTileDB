@@ -132,10 +132,19 @@ workspace "pytiledb" --solution "xtcommon"
 		files
 		{   
 --			"../../cpp/src/xtboost/**.cpp",   
-			"../src/tiledb_pybind/*.cpp"
+			"../src/tiledb_pybind/*.cpp",
+                        "../src/tiledb/cxx_api/*.h",
+                        "../src/tiledb/cxx_api/*.cc",
+
 		}		
 		excludes
 		{
+                        "../src/tiledb/cxx_api/tiledb.h",
+                        "../src/tiledb/cxx_api/tiledb.cc",
+                        "../src/tiledb/cxx_api/tiledb_export*.h",
+                        "../src/tiledb/cxx_api/tiledb_serialization.h",
+                        "../src/tiledb/cxx_api/tiledb_struct_def.h",
+                        "../src/tiledb/cxx_api/tiledb_version.h",
 --			"../../cpp/src/xtboost/boost_python.cpp",
 		}		
 

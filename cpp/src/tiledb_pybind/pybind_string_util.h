@@ -3,6 +3,7 @@
 #define TILEDB_PYBIND_STRING_UTIL_H
 
 #include "common_include.h" 
+#include "init_module_common.h"
 
 
 #include "string_util.h"
