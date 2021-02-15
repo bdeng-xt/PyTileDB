@@ -172,8 +172,8 @@ target_include_directories(pytiledb
     ${pybind11_sources_SOURCE_DIR}/include
     ${zlib_SOURCE_DIR}/include 
     ${_pyarrow_location}/include
-  "${CMAKE_CURRENT_SOURCE_DIR}/tiledb/cxx_api/"
-  "${CMAKE_CURRENT_SOURCE_DIR}/tiledb_pybind/"
+    ${CMAKE_CURRENT_SOURCE_DIR}/tiledb/cxx_api
+    ${CMAKE_CURRENT_SOURCE_DIR}/tiledb_pybind
 
 )
 
@@ -186,10 +186,7 @@ target_link_directories(pytiledb
     ${tiledb_prebuilt_SOURCE_DIR}/bin
 )
 
-#add_dependencies(pytiledb
-#  TileDB::tiledb_shared
-#
-#)
+ 
 
 target_link_libraries(pytiledb
   PUBLIC 
@@ -199,7 +196,7 @@ target_link_libraries(pytiledb
 
 if(UNIX)
 
-  set(CMAKE_CXX_FLAGS ${CMAKE_CXX_FLAGS}
+  add_compile_options(
     "HAVE_PYCONFIG"
     "-D_GLIBCXX_USE_NANOSLEEP"
     "-D_THREAD_SAFE"
@@ -210,6 +207,7 @@ if(UNIX)
     "-DLINUX"
     "-D_POSIX_THREADS"      
   )
+
   set_target_properties(pytiledb
     PROPERTIES
       PREFIX ""
