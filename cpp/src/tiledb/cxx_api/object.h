@@ -36,7 +36,7 @@
 #define TILEDB_CPP_API_OBJECT_H
 
 #include "context.h"
-#include "object.h"
+#include "tiledb_enum.h"
 #include "tiledb.h"
 
 #include <functional>
