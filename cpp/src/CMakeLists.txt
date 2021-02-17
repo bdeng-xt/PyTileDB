@@ -52,8 +52,8 @@ if(NOT tiledb_prebuilt_POPULATED)
 #  )
 endif()
 include(${tiledb_prebuilt_SOURCE_DIR}/lib/cmake/TileDB/TileDBConfig.cmake)
-include(${tiledb_prebuilt_SOURCE_DIR}/lib/cmake/TileDB/TileDBTargets.cmake)
-include(${tiledb_prebuilt_SOURCE_DIR}/lib/cmake/TileDB/TileDBTargets-release.cmake)
+#include(${tiledb_prebuilt_SOURCE_DIR}/lib/cmake/TileDB/TileDBTargets.cmake)
+#include(${tiledb_prebuilt_SOURCE_DIR}/lib/cmake/TileDB/TileDBTargets-release.cmake)
 
 ###############################
 # zlib  
@@ -96,8 +96,12 @@ execute_process(
 
 if(NOT ${_pyarrow_status})
   set(PyArrow ${_pyarrow_location} CACHE STRING "Location of PyArrow")
-  message(STATUS "location of pyarrow:${_pyarrow_location}")
+else()
+  message(STATUS "please install pyarrow! pip install pyarrow")
 endif()
+message(STATUS "location of pyarrow:${_pyarrow_location}")
+#file(GLOB PYARROW_LIBS ${_pyarrow_location}/*arrow* )
+#message(STATUS "PYARROW_LIBS:${PYARROW_LIBS}")
 
 include(FindPackageHandleStandardArgs)
 find_package_handle_standard_args(pyarrow
@@ -217,8 +221,8 @@ if(UNIX)
   target_link_libraries(pytiledb
     PUBLIC
       pthread
-      libarrow.so.200
-      libarrow_python.so.200
+      -l:libarrow.so.200
+      -l:libarrow_python.so.200
   )
 endif()
 
