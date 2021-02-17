@@ -114,37 +114,37 @@ find_package_handle_standard_args(pyarrow
 # Common Object library
 ##################################
 set(TILEDB_CXX_API_SOURCES
-  ${CMAKE_CURRENT_SOURCE_DIR}/tiledb/cxx_api/array.h 
-  ${CMAKE_CURRENT_SOURCE_DIR}/tiledb/cxx_api/array_schema.h 
-  ${CMAKE_CURRENT_SOURCE_DIR}/tiledb/cxx_api/array_util.h 
-  ${CMAKE_CURRENT_SOURCE_DIR}/tiledb/cxx_api/array_util.cc
-  ${CMAKE_CURRENT_SOURCE_DIR}/tiledb/cxx_api/attribute.h 
-  ${CMAKE_CURRENT_SOURCE_DIR}/tiledb/cxx_api/column.h 
-  ${CMAKE_CURRENT_SOURCE_DIR}/tiledb/cxx_api/column.cc 
-  ${CMAKE_CURRENT_SOURCE_DIR}/tiledb/cxx_api/config.h 
-  ${CMAKE_CURRENT_SOURCE_DIR}/tiledb/cxx_api/context.h 
-  ${CMAKE_CURRENT_SOURCE_DIR}/tiledb/cxx_api/core_interface.h 
-  ${CMAKE_CURRENT_SOURCE_DIR}/tiledb/cxx_api/deleter.h 
-  ${CMAKE_CURRENT_SOURCE_DIR}/tiledb/cxx_api/dimension.h 
-  ${CMAKE_CURRENT_SOURCE_DIR}/tiledb/cxx_api/domain.h 
-  ${CMAKE_CURRENT_SOURCE_DIR}/tiledb/cxx_api/exception.h 
-  ${CMAKE_CURRENT_SOURCE_DIR}/tiledb/cxx_api/filter.h 
-  ${CMAKE_CURRENT_SOURCE_DIR}/tiledb/cxx_api/filter_list.h 
-  ${CMAKE_CURRENT_SOURCE_DIR}/tiledb/cxx_api/group.h 
-  ${CMAKE_CURRENT_SOURCE_DIR}/tiledb/cxx_api/json.hpp 
-  ${CMAKE_CURRENT_SOURCE_DIR}/tiledb/cxx_api/object.h  
-  ${CMAKE_CURRENT_SOURCE_DIR}/tiledb/cxx_api/object_iter.h 
-  ${CMAKE_CURRENT_SOURCE_DIR}/tiledb/cxx_api/query.h 
-  ${CMAKE_CURRENT_SOURCE_DIR}/tiledb/cxx_api/schema_base.h     
-  ${CMAKE_CURRENT_SOURCE_DIR}/tiledb/cxx_api/stats.h 
-  ${CMAKE_CURRENT_SOURCE_DIR}/tiledb/cxx_api/string_util.h 
-  ${CMAKE_CURRENT_SOURCE_DIR}/tiledb/cxx_api/string_util.cc 
- # ${CMAKE_CURRENT_SOURCE_DIR}/tiledb/cxx_api/tiledb 
+  ${CMAKE_CURRENT_SOURCE_DIR}/tiledb/cxx_api/tiledb_cxx_array.h 
+  ${CMAKE_CURRENT_SOURCE_DIR}/tiledb/cxx_api/tiledb_cxx_array_schema.h 
+  ${CMAKE_CURRENT_SOURCE_DIR}/tiledb/cxx_api/tiledb_cxx_array_util.h 
+  ${CMAKE_CURRENT_SOURCE_DIR}/tiledb/cxx_api/tiledb_cxx_array_util.cc
+  ${CMAKE_CURRENT_SOURCE_DIR}/tiledb/cxx_api/tiledb_cxx_attribute.h 
+  ${CMAKE_CURRENT_SOURCE_DIR}/tiledb/cxx_api/tiledb_cxx_column.h 
+  ${CMAKE_CURRENT_SOURCE_DIR}/tiledb/cxx_api/tiledb_cxx_column.cc 
+  ${CMAKE_CURRENT_SOURCE_DIR}/tiledb/cxx_api/tiledb_cxx_config.h 
+  ${CMAKE_CURRENT_SOURCE_DIR}/tiledb/cxx_api/tiledb_cxx_context.h 
+  ${CMAKE_CURRENT_SOURCE_DIR}/tiledb/cxx_api/tiledb_cxx_core_interface.h 
+  ${CMAKE_CURRENT_SOURCE_DIR}/tiledb/cxx_api/tiledb_cxx_deleter.h 
+  ${CMAKE_CURRENT_SOURCE_DIR}/tiledb/cxx_api/tiledb_cxx_dimension.h 
+  ${CMAKE_CURRENT_SOURCE_DIR}/tiledb/cxx_api/tiledb_cxx_domain.h 
+  ${CMAKE_CURRENT_SOURCE_DIR}/tiledb/cxx_api/tiledb_cxx_exception.h 
+  ${CMAKE_CURRENT_SOURCE_DIR}/tiledb/cxx_api/tiledb_cxx_filter.h 
+  ${CMAKE_CURRENT_SOURCE_DIR}/tiledb/cxx_api/tiledb_cxx_filter_list.h 
+  ${CMAKE_CURRENT_SOURCE_DIR}/tiledb/cxx_api/tiledb_cxx_group.h 
+  ${CMAKE_CURRENT_SOURCE_DIR}/tiledb/cxx_api/tiledb_cxx_json.hpp 
+  ${CMAKE_CURRENT_SOURCE_DIR}/tiledb/cxx_api/tiledb_cxx_object.h  
+  ${CMAKE_CURRENT_SOURCE_DIR}/tiledb/cxx_api/tiledb_cxx_object_iter.h 
+  ${CMAKE_CURRENT_SOURCE_DIR}/tiledb/cxx_api/tiledb_cxx_query.h 
+  ${CMAKE_CURRENT_SOURCE_DIR}/tiledb/cxx_api/tiledb_cxx_schema_base.h     
+  ${CMAKE_CURRENT_SOURCE_DIR}/tiledb/cxx_api/tiledb_cxx_stats.h 
+  ${CMAKE_CURRENT_SOURCE_DIR}/tiledb/cxx_api/tiledb_cxx_string_util.h 
+  ${CMAKE_CURRENT_SOURCE_DIR}/tiledb/cxx_api/tiledb_cxx_string_util.cc 
+ # ${CMAKE_CURRENT_SOURCE_DIR}/tiledb/cxx_api/tiledb_cxx.h 
   ${CMAKE_CURRENT_SOURCE_DIR}/tiledb/cxx_api/tiledb_enum.h 
-  ${CMAKE_CURRENT_SOURCE_DIR}/tiledb/cxx_api/type.h 
-  ${CMAKE_CURRENT_SOURCE_DIR}/tiledb/cxx_api/utils.h  
-  ${CMAKE_CURRENT_SOURCE_DIR}/tiledb/cxx_api/version.h 
-  ${CMAKE_CURRENT_SOURCE_DIR}/tiledb/cxx_api/vfs.h  
+  ${CMAKE_CURRENT_SOURCE_DIR}/tiledb/cxx_api/tiledb_cxx_type.h 
+  ${CMAKE_CURRENT_SOURCE_DIR}/tiledb/cxx_api/tiledb_cxx_utils.h  
+  ${CMAKE_CURRENT_SOURCE_DIR}/tiledb/cxx_api/tiledb_cxx_version.h 
+  ${CMAKE_CURRENT_SOURCE_DIR}/tiledb/cxx_api/tiledb_cxx_vfs.h  
 )
 
 if(${CMAKE_VERSION} VERSION_GREATER_EQUAL "3.11.0")
@@ -182,6 +182,7 @@ target_link_directories(pytiledb
     ${PYTHON_LIBRARY}
     ${_pyarrow_location}
     pybind11::module
+    ${tiledb_prebuilt_SOURCE_DIR}
     ${tiledb_prebuilt_SOURCE_DIR}/lib
     ${tiledb_prebuilt_SOURCE_DIR}/bin
 )
@@ -242,7 +243,7 @@ set(CMAKE_CXX_FLAGS ${CMAKE_CXX_FLAGS}
   )
   target_link_libraries(pytiledb
     PUBLIC
-      arrow,
+      arrow
       arrow_python
   )  
 
