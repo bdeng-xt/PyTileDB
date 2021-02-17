@@ -183,8 +183,8 @@ target_link_directories(pytiledb
     ${_pyarrow_location}
     pybind11::module
     ${tiledb_prebuilt_SOURCE_DIR}
-    ${tiledb_prebuilt_SOURCE_DIR}/lib
-    ${tiledb_prebuilt_SOURCE_DIR}/bin
+#    ${tiledb_prebuilt_SOURCE_DIR}/lib
+#    ${tiledb_prebuilt_SOURCE_DIR}/bin
 )
 
  

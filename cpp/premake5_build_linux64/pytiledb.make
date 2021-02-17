@@ -38,32 +38,36 @@ all: prebuild prelink $(TARGET)
 endif
 
 OBJECTS := \
+	$(OBJDIR)/tiledb_cxx_array_util.o \
+	$(OBJDIR)/tiledb_cxx_column.o \
+	$(OBJDIR)/tiledb_cxx_string_util.o \
 	$(OBJDIR)/init_module_common.o \
 	$(OBJDIR)/init_module_pybind.o \
-	$(OBJDIR)/pybind_array.o \
-	$(OBJDIR)/pybind_array_schema.o \
-	$(OBJDIR)/pybind_array_util.o \
-	$(OBJDIR)/pybind_attribute.o \
-	$(OBJDIR)/pybind_column.o \
-	$(OBJDIR)/pybind_config.o \
-	$(OBJDIR)/pybind_context.o \
-	$(OBJDIR)/pybind_core_interface.o \
-	$(OBJDIR)/pybind_dimension.o \
-	$(OBJDIR)/pybind_domain.o \
-	$(OBJDIR)/pybind_exception.o \
-	$(OBJDIR)/pybind_filter.o \
-	$(OBJDIR)/pybind_filter_list.o \
-	$(OBJDIR)/pybind_group.o \
-	$(OBJDIR)/pybind_object.o \
-	$(OBJDIR)/pybind_object_iter.o \
-	$(OBJDIR)/pybind_query.o \
-	$(OBJDIR)/pybind_stats.o \
-	$(OBJDIR)/pybind_string_util.o \
+	$(OBJDIR)/pybind_tiledb_cxx.o \
+	$(OBJDIR)/pybind_tiledb_cxx_array.o \
+	$(OBJDIR)/pybind_tiledb_cxx_array_schema.o \
+	$(OBJDIR)/pybind_tiledb_cxx_array_util.o \
+	$(OBJDIR)/pybind_tiledb_cxx_attribute.o \
+	$(OBJDIR)/pybind_tiledb_cxx_column.o \
+	$(OBJDIR)/pybind_tiledb_cxx_config.o \
+	$(OBJDIR)/pybind_tiledb_cxx_context.o \
+	$(OBJDIR)/pybind_tiledb_cxx_core_interface.o \
+	$(OBJDIR)/pybind_tiledb_cxx_dimension.o \
+	$(OBJDIR)/pybind_tiledb_cxx_domain.o \
+	$(OBJDIR)/pybind_tiledb_cxx_exception.o \
+	$(OBJDIR)/pybind_tiledb_cxx_filter.o \
+	$(OBJDIR)/pybind_tiledb_cxx_filter_list.o \
+	$(OBJDIR)/pybind_tiledb_cxx_group.o \
+	$(OBJDIR)/pybind_tiledb_cxx_object.o \
+	$(OBJDIR)/pybind_tiledb_cxx_object_iter.o \
+	$(OBJDIR)/pybind_tiledb_cxx_query.o \
+	$(OBJDIR)/pybind_tiledb_cxx_stats.o \
+	$(OBJDIR)/pybind_tiledb_cxx_string_util.o \
+	$(OBJDIR)/pybind_tiledb_cxx_type.o \
+	$(OBJDIR)/pybind_tiledb_cxx_utils.o \
+	$(OBJDIR)/pybind_tiledb_cxx_version.o \
+	$(OBJDIR)/pybind_tiledb_cxx_vfs.o \
 	$(OBJDIR)/pybind_tiledb_enum.o \
-	$(OBJDIR)/pybind_type.o \
-	$(OBJDIR)/pybind_utils.o \
-	$(OBJDIR)/pybind_version.o \
-	$(OBJDIR)/pybind_vfs.o \
 
 RESOURCES := \
 
@@ -122,82 +126,94 @@ else
 $(OBJECTS): | $(OBJDIR)
 endif
 
+$(OBJDIR)/tiledb_cxx_array_util.o: ../src/tiledb/cxx_api/tiledb_cxx_array_util.cc
+	@echo $(notdir $<)
+	$(SILENT) $(CXX) $(ALL_CXXFLAGS) $(FORCE_INCLUDE) -o "$@" -MF "$(@:%.o=%.d)" -c "$<"
+$(OBJDIR)/tiledb_cxx_column.o: ../src/tiledb/cxx_api/tiledb_cxx_column.cc
+	@echo $(notdir $<)
+	$(SILENT) $(CXX) $(ALL_CXXFLAGS) $(FORCE_INCLUDE) -o "$@" -MF "$(@:%.o=%.d)" -c "$<"
+$(OBJDIR)/tiledb_cxx_string_util.o: ../src/tiledb/cxx_api/tiledb_cxx_string_util.cc
+	@echo $(notdir $<)
+	$(SILENT) $(CXX) $(ALL_CXXFLAGS) $(FORCE_INCLUDE) -o "$@" -MF "$(@:%.o=%.d)" -c "$<"
 $(OBJDIR)/init_module_common.o: ../src/tiledb_pybind/init_module_common.cpp
 	@echo $(notdir $<)
 	$(SILENT) $(CXX) $(ALL_CXXFLAGS) $(FORCE_INCLUDE) -o "$@" -MF "$(@:%.o=%.d)" -c "$<"
 $(OBJDIR)/init_module_pybind.o: ../src/tiledb_pybind/init_module_pybind.cpp
 	@echo $(notdir $<)
 	$(SILENT) $(CXX) $(ALL_CXXFLAGS) $(FORCE_INCLUDE) -o "$@" -MF "$(@:%.o=%.d)" -c "$<"
-$(OBJDIR)/pybind_array.o: ../src/tiledb_pybind/pybind_array.cpp
+$(OBJDIR)/pybind_tiledb_cxx.o: ../src/tiledb_pybind/pybind_tiledb_cxx.cpp
 	@echo $(notdir $<)
 	$(SILENT) $(CXX) $(ALL_CXXFLAGS) $(FORCE_INCLUDE) -o "$@" -MF "$(@:%.o=%.d)" -c "$<"
-$(OBJDIR)/pybind_array_schema.o: ../src/tiledb_pybind/pybind_array_schema.cpp
+$(OBJDIR)/pybind_tiledb_cxx_array.o: ../src/tiledb_pybind/pybind_tiledb_cxx_array.cpp
 	@echo $(notdir $<)
 	$(SILENT) $(CXX) $(ALL_CXXFLAGS) $(FORCE_INCLUDE) -o "$@" -MF "$(@:%.o=%.d)" -c "$<"
-$(OBJDIR)/pybind_array_util.o: ../src/tiledb_pybind/pybind_array_util.cpp
+$(OBJDIR)/pybind_tiledb_cxx_array_schema.o: ../src/tiledb_pybind/pybind_tiledb_cxx_array_schema.cpp
 	@echo $(notdir $<)
 	$(SILENT) $(CXX) $(ALL_CXXFLAGS) $(FORCE_INCLUDE) -o "$@" -MF "$(@:%.o=%.d)" -c "$<"
-$(OBJDIR)/pybind_attribute.o: ../src/tiledb_pybind/pybind_attribute.cpp
+$(OBJDIR)/pybind_tiledb_cxx_array_util.o: ../src/tiledb_pybind/pybind_tiledb_cxx_array_util.cpp
 	@echo $(notdir $<)
 	$(SILENT) $(CXX) $(ALL_CXXFLAGS) $(FORCE_INCLUDE) -o "$@" -MF "$(@:%.o=%.d)" -c "$<"
-$(OBJDIR)/pybind_column.o: ../src/tiledb_pybind/pybind_column.cpp
+$(OBJDIR)/pybind_tiledb_cxx_attribute.o: ../src/tiledb_pybind/pybind_tiledb_cxx_attribute.cpp
 	@echo $(notdir $<)
 	$(SILENT) $(CXX) $(ALL_CXXFLAGS) $(FORCE_INCLUDE) -o "$@" -MF "$(@:%.o=%.d)" -c "$<"
-$(OBJDIR)/pybind_config.o: ../src/tiledb_pybind/pybind_config.cpp
+$(OBJDIR)/pybind_tiledb_cxx_column.o: ../src/tiledb_pybind/pybind_tiledb_cxx_column.cpp
 	@echo $(notdir $<)
 	$(SILENT) $(CXX) $(ALL_CXXFLAGS) $(FORCE_INCLUDE) -o "$@" -MF "$(@:%.o=%.d)" -c "$<"
-$(OBJDIR)/pybind_context.o: ../src/tiledb_pybind/pybind_context.cpp
+$(OBJDIR)/pybind_tiledb_cxx_config.o: ../src/tiledb_pybind/pybind_tiledb_cxx_config.cpp
 	@echo $(notdir $<)
 	$(SILENT) $(CXX) $(ALL_CXXFLAGS) $(FORCE_INCLUDE) -o "$@" -MF "$(@:%.o=%.d)" -c "$<"
-$(OBJDIR)/pybind_core_interface.o: ../src/tiledb_pybind/pybind_core_interface.cpp
+$(OBJDIR)/pybind_tiledb_cxx_context.o: ../src/tiledb_pybind/pybind_tiledb_cxx_context.cpp
 	@echo $(notdir $<)
 	$(SILENT) $(CXX) $(ALL_CXXFLAGS) $(FORCE_INCLUDE) -o "$@" -MF "$(@:%.o=%.d)" -c "$<"
-$(OBJDIR)/pybind_dimension.o: ../src/tiledb_pybind/pybind_dimension.cpp
+$(OBJDIR)/pybind_tiledb_cxx_core_interface.o: ../src/tiledb_pybind/pybind_tiledb_cxx_core_interface.cpp
 	@echo $(notdir $<)
 	$(SILENT) $(CXX) $(ALL_CXXFLAGS) $(FORCE_INCLUDE) -o "$@" -MF "$(@:%.o=%.d)" -c "$<"
-$(OBJDIR)/pybind_domain.o: ../src/tiledb_pybind/pybind_domain.cpp
+$(OBJDIR)/pybind_tiledb_cxx_dimension.o: ../src/tiledb_pybind/pybind_tiledb_cxx_dimension.cpp
 	@echo $(notdir $<)
 	$(SILENT) $(CXX) $(ALL_CXXFLAGS) $(FORCE_INCLUDE) -o "$@" -MF "$(@:%.o=%.d)" -c "$<"
-$(OBJDIR)/pybind_exception.o: ../src/tiledb_pybind/pybind_exception.cpp
+$(OBJDIR)/pybind_tiledb_cxx_domain.o: ../src/tiledb_pybind/pybind_tiledb_cxx_domain.cpp
 	@echo $(notdir $<)
 	$(SILENT) $(CXX) $(ALL_CXXFLAGS) $(FORCE_INCLUDE) -o "$@" -MF "$(@:%.o=%.d)" -c "$<"
-$(OBJDIR)/pybind_filter.o: ../src/tiledb_pybind/pybind_filter.cpp
+$(OBJDIR)/pybind_tiledb_cxx_exception.o: ../src/tiledb_pybind/pybind_tiledb_cxx_exception.cpp
 	@echo $(notdir $<)
 	$(SILENT) $(CXX) $(ALL_CXXFLAGS) $(FORCE_INCLUDE) -o "$@" -MF "$(@:%.o=%.d)" -c "$<"
-$(OBJDIR)/pybind_filter_list.o: ../src/tiledb_pybind/pybind_filter_list.cpp
+$(OBJDIR)/pybind_tiledb_cxx_filter.o: ../src/tiledb_pybind/pybind_tiledb_cxx_filter.cpp
 	@echo $(notdir $<)
 	$(SILENT) $(CXX) $(ALL_CXXFLAGS) $(FORCE_INCLUDE) -o "$@" -MF "$(@:%.o=%.d)" -c "$<"
-$(OBJDIR)/pybind_group.o: ../src/tiledb_pybind/pybind_group.cpp
+$(OBJDIR)/pybind_tiledb_cxx_filter_list.o: ../src/tiledb_pybind/pybind_tiledb_cxx_filter_list.cpp
 	@echo $(notdir $<)
 	$(SILENT) $(CXX) $(ALL_CXXFLAGS) $(FORCE_INCLUDE) -o "$@" -MF "$(@:%.o=%.d)" -c "$<"
-$(OBJDIR)/pybind_object.o: ../src/tiledb_pybind/pybind_object.cpp
+$(OBJDIR)/pybind_tiledb_cxx_group.o: ../src/tiledb_pybind/pybind_tiledb_cxx_group.cpp
 	@echo $(notdir $<)
 	$(SILENT) $(CXX) $(ALL_CXXFLAGS) $(FORCE_INCLUDE) -o "$@" -MF "$(@:%.o=%.d)" -c "$<"
-$(OBJDIR)/pybind_object_iter.o: ../src/tiledb_pybind/pybind_object_iter.cpp
+$(OBJDIR)/pybind_tiledb_cxx_object.o: ../src/tiledb_pybind/pybind_tiledb_cxx_object.cpp
 	@echo $(notdir $<)
 	$(SILENT) $(CXX) $(ALL_CXXFLAGS) $(FORCE_INCLUDE) -o "$@" -MF "$(@:%.o=%.d)" -c "$<"
-$(OBJDIR)/pybind_query.o: ../src/tiledb_pybind/pybind_query.cpp
+$(OBJDIR)/pybind_tiledb_cxx_object_iter.o: ../src/tiledb_pybind/pybind_tiledb_cxx_object_iter.cpp
 	@echo $(notdir $<)
 	$(SILENT) $(CXX) $(ALL_CXXFLAGS) $(FORCE_INCLUDE) -o "$@" -MF "$(@:%.o=%.d)" -c "$<"
-$(OBJDIR)/pybind_stats.o: ../src/tiledb_pybind/pybind_stats.cpp
+$(OBJDIR)/pybind_tiledb_cxx_query.o: ../src/tiledb_pybind/pybind_tiledb_cxx_query.cpp
 	@echo $(notdir $<)
 	$(SILENT) $(CXX) $(ALL_CXXFLAGS) $(FORCE_INCLUDE) -o "$@" -MF "$(@:%.o=%.d)" -c "$<"
-$(OBJDIR)/pybind_string_util.o: ../src/tiledb_pybind/pybind_string_util.cpp
+$(OBJDIR)/pybind_tiledb_cxx_stats.o: ../src/tiledb_pybind/pybind_tiledb_cxx_stats.cpp
+	@echo $(notdir $<)
+	$(SILENT) $(CXX) $(ALL_CXXFLAGS) $(FORCE_INCLUDE) -o "$@" -MF "$(@:%.o=%.d)" -c "$<"
+$(OBJDIR)/pybind_tiledb_cxx_string_util.o: ../src/tiledb_pybind/pybind_tiledb_cxx_string_util.cpp
+	@echo $(notdir $<)
+	$(SILENT) $(CXX) $(ALL_CXXFLAGS) $(FORCE_INCLUDE) -o "$@" -MF "$(@:%.o=%.d)" -c "$<"
+$(OBJDIR)/pybind_tiledb_cxx_type.o: ../src/tiledb_pybind/pybind_tiledb_cxx_type.cpp
+	@echo $(notdir $<)
+	$(SILENT) $(CXX) $(ALL_CXXFLAGS) $(FORCE_INCLUDE) -o "$@" -MF "$(@:%.o=%.d)" -c "$<"
+$(OBJDIR)/pybind_tiledb_cxx_utils.o: ../src/tiledb_pybind/pybind_tiledb_cxx_utils.cpp
+	@echo $(notdir $<)
+	$(SILENT) $(CXX) $(ALL_CXXFLAGS) $(FORCE_INCLUDE) -o "$@" -MF "$(@:%.o=%.d)" -c "$<"
+$(OBJDIR)/pybind_tiledb_cxx_version.o: ../src/tiledb_pybind/pybind_tiledb_cxx_version.cpp
+	@echo $(notdir $<)
+	$(SILENT) $(CXX) $(ALL_CXXFLAGS) $(FORCE_INCLUDE) -o "$@" -MF "$(@:%.o=%.d)" -c "$<"
+$(OBJDIR)/pybind_tiledb_cxx_vfs.o: ../src/tiledb_pybind/pybind_tiledb_cxx_vfs.cpp
 	@echo $(notdir $<)
 	$(SILENT) $(CXX) $(ALL_CXXFLAGS) $(FORCE_INCLUDE) -o "$@" -MF "$(@:%.o=%.d)" -c "$<"
 $(OBJDIR)/pybind_tiledb_enum.o: ../src/tiledb_pybind/pybind_tiledb_enum.cpp
-	@echo $(notdir $<)
-	$(SILENT) $(CXX) $(ALL_CXXFLAGS) $(FORCE_INCLUDE) -o "$@" -MF "$(@:%.o=%.d)" -c "$<"
-$(OBJDIR)/pybind_type.o: ../src/tiledb_pybind/pybind_type.cpp
-	@echo $(notdir $<)
-	$(SILENT) $(CXX) $(ALL_CXXFLAGS) $(FORCE_INCLUDE) -o "$@" -MF "$(@:%.o=%.d)" -c "$<"
-$(OBJDIR)/pybind_utils.o: ../src/tiledb_pybind/pybind_utils.cpp
-	@echo $(notdir $<)
-	$(SILENT) $(CXX) $(ALL_CXXFLAGS) $(FORCE_INCLUDE) -o "$@" -MF "$(@:%.o=%.d)" -c "$<"
-$(OBJDIR)/pybind_version.o: ../src/tiledb_pybind/pybind_version.cpp
-	@echo $(notdir $<)
-	$(SILENT) $(CXX) $(ALL_CXXFLAGS) $(FORCE_INCLUDE) -o "$@" -MF "$(@:%.o=%.d)" -c "$<"
-$(OBJDIR)/pybind_vfs.o: ../src/tiledb_pybind/pybind_vfs.cpp
 	@echo $(notdir $<)
 	$(SILENT) $(CXX) $(ALL_CXXFLAGS) $(FORCE_INCLUDE) -o "$@" -MF "$(@:%.o=%.d)" -c "$<"
 
