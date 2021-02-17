@@ -13,8 +13,9 @@ set(CMAKE_CXX_STANDARD_REQUIRED 11)
 set(CMAKE_CXX_EXTENSIONS OFF)
 
 # Release build by default
+set(default_build_type "Release")
 if (NOT CMAKE_BUILD_TYPE)
-  set(CMAKE_BUILD_TYPE RELEASE)
+  set(CMAKE_BUILD_TYPE ${default_build_type})
 endif()
 
 # installation prefix
@@ -27,8 +28,9 @@ endif()
 
 # compiler flags
 string(TOUPPER "${CMAKE_BUILD_TYPE}" BUILD_TYPE)
+message(STATUS "BUILD_TYPE:${BUILD_TYPE}")
 if(BUILD_TYPE STREQUAL "RELEASE")
-  add_compile_options(-DNEBUG)
+  add_compile_options(-DNDEBUG)
 endif()
 
 if(BUILD_TYPE STREQUAL "DEBUG")
@@ -37,10 +39,10 @@ endif()
 
  
 ######################################
-# Regular Build
+# Build
 ######################################
 # Enable testing
-enable_testing()
+#enable_testing()
 
 # src
 add_subdirectory(src)
