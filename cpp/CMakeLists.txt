@@ -19,6 +19,7 @@ if (NOT CMAKE_BUILD_TYPE)
 endif()
 
 # installation prefix
+option(OVERRIDE_INSTALL_PREFIX "override default installation directory to ../dist" ON)
 if (OVERRIDE_INSTALL_PREFIX)
   set(PREFIX_REL_PATH "${CMAKE_SOURCE_DIR}/../dist")
   get_filename_component(DEFAULT_PREFIX "${PREFIX_REL_PATH}" ABSOLUTE)

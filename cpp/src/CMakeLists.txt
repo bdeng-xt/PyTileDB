@@ -74,6 +74,27 @@ if(NOT zlib_POPULATED)
       )
 endif()
 
+#################################
+# snappy
+################################
+FetchContent_Declare(
+    snappy
+    GIT_REPOSITORY "https://github.com/google/snappy.git"
+    GIT_TAG "1.1.8"
+)
+FetchContent_GetProperties(snappy)
+if(NOT snappy_POPULATED)
+    FetchContent_Populate(snappy)
+    message(STATUS "snappy_SOURCE_DIR:${snappy_SOURCE_DIR}")
+    message(STATUS "snappy_BINARY_DIR:${snappy_BINARY_DIR}")
+    add_subdirectory(
+      ${snappy_SOURCE_DIR} 
+      ${snappy_BINARY_DIR}
+      )
+endif()
+set(SNAPPY_INSTALL ON)
+
+  
 
 
 ###############################
@@ -175,6 +196,7 @@ target_include_directories(pytiledb
     ${PYTHON_INCLUDE_DIRS}
     ${pybind11_sources_SOURCE_DIR}/include
     ${zlib_SOURCE_DIR}/include 
+    ${snappy_SOURCE_DIR}
     ${_pyarrow_location}/include
     ${CMAKE_CURRENT_SOURCE_DIR}/tiledb/cxx_api
     ${CMAKE_CURRENT_SOURCE_DIR}/tiledb_pybind
@@ -189,6 +211,8 @@ target_link_directories(pytiledb
     ${tiledb_prebuilt_SOURCE_DIR}
 #    ${tiledb_prebuilt_SOURCE_DIR}/lib
 #    ${tiledb_prebuilt_SOURCE_DIR}/bin
+    zlib
+    snappy
 )
 
  
@@ -252,6 +276,30 @@ set(CMAKE_CXX_FLAGS ${CMAKE_CXX_FLAGS}
   )  
 
 endif()
+
+ file(
+   GLOB TILDB_LIBFILES 
+   ${tiledb_prebuilt_SOURCE_DIR}/lib/*.so*
+   ${tiledb_prebuilt_SOURCE_DIR}/lib/*.dll*
+   ${tiledb_prebuilt_SOURCE_DIR}/lib/*.lib*
+ )
+ install(
+   FILES 
+     ${TILDB_LIBFILES}
+   DESTINATION 
+   "${INSTALL_LIB_DIR}"
+ )
+
+ 
+
+install(
+  TARGETS 
+  pytiledb 
+  ARCHIVE 
+    DESTINATION "${INSTALL_LIB_DIR}"
+  LIBRARY 
+    DESTINATION "${INSTALL_LIB_DIR}"
+)
 
 
  
